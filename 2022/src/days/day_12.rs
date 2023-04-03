@@ -39,11 +39,7 @@ fn find_path<F: Fn(&char) -> bool>(input: &Map<char>, start: F) -> i32 {
     let mut current_nodes: Vec<(usize, usize)> = distances
         .iter()
         .enumerate()
-        .flat_map(|(y, row)| {
-            row.iter()
-                .enumerate()
-                .filter_map(move |(x, d)| d.filter(|&d| d == 0).map(|_| (y, x)))
-        })
+        .flat_map(|(y, row)| row.iter().enumerate().filter_map(move |(x, d)| d.map(|_| (y, x))))
         .collect();
 
     loop {
