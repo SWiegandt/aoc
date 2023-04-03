@@ -33,7 +33,7 @@ fn find_path<F: Fn(&char) -> bool>(input: &Map<char>, start: F) -> i32 {
 
     let mut distances: Map<Option<i32>> = input
         .iter()
-        .map(|row| row.iter().map(|&c| Some(c).filter(|c| start(c)).map(|_| 0)).collect())
+        .map(|row| row.iter().map(|c| if start(c) { Some(0) } else { None }).collect())
         .collect();
 
     let mut current_nodes: Vec<(usize, usize)> = distances
