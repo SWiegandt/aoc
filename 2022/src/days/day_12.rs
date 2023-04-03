@@ -13,7 +13,7 @@ fn to_elevation(c: char) -> i32 {
 }
 
 fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
-    let mut current_nodes: Vec<(i32, i32)> = vec![];
+    let mut current_nodes: Vec<(usize, usize)> = vec![];
     let mut distance = 0;
 
     let mut distances: Map<Option<i32>> = input
@@ -24,7 +24,7 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
                 .enumerate()
                 .map(|(x, c)| {
                     if start(*c) {
-                        current_nodes.push((y as i32, x as i32));
+                        current_nodes.push((y, x));
                         Some(distance)
                     } else {
                         None
@@ -34,70 +34,44 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
         })
         .collect();
 
-    let y_len = distances.len();
-    let x_len = distances[0].len();
+    let y_len = distances.len() as i32;
 
     'outer: loop {
         distance += 1;
         let mut next_nodes = HashSet::new();
 
         for (y, x) in current_nodes.iter() {
-            let elevation = to_elevation(input[*y as usize][*x as usize]);
+            if input[*y][*x] == 'E' {
+                break 'outer distance - 1;
+            }
 
-            if y - 1 >= 0 {
-                if to_elevation(input[(y - 1) as usize][*x as usize]) <= elevation + 1 {
-                    if let Some(d) = distances[(y - 1) as usize][*x as usize] {
-                        if d > distance {
-                            next_nodes.insert((y - 1, *x));
-                        }
-                    } else {
-                        next_nodes.insert((y - 1, *x));
+            let elevation = to_elevation(input[*y][*x]);
+            let x_len = distances[*y].len() as i32;
+
+            for y_neighbor in [(*y as i32) - 1, (*y as i32) + 1]
+                .iter()
+                .filter(|&&y| y >= 0 && y < y_len)
+                .map(|&y| y as usize)
+            {
+                if to_elevation(input[y_neighbor][*x]) <= elevation + 1 {
+                    if distances[y_neighbor][*x].is_none() {
+                        next_nodes.insert((y_neighbor, *x));
+                        distances[y_neighbor][*x] = Some(distance);
                     }
                 }
             }
 
-            if ((y + 1) as usize) < y_len {
-                if to_elevation(input[(y + 1) as usize][*x as usize]) <= elevation + 1 {
-                    if let Some(d) = distances[(y + 1) as usize][*x as usize] {
-                        if d > distance {
-                            next_nodes.insert((y + 1, *x));
-                        }
-                    } else {
-                        next_nodes.insert((y + 1, *x));
+            for x_neighbor in [(*x as i32) - 1, (*x as i32) + 1]
+                .iter()
+                .filter(|&&x| x >= 0 && x < x_len)
+                .map(|&x| x as usize)
+            {
+                if to_elevation(input[*y][x_neighbor]) <= elevation + 1 {
+                    if distances[*y][x_neighbor].is_none() {
+                        next_nodes.insert((*y, x_neighbor));
+                        distances[*y][x_neighbor] = Some(distance);
                     }
                 }
-            }
-
-            if x - 1 >= 0 {
-                if to_elevation(input[*y as usize][(x - 1) as usize]) <= elevation + 1 {
-                    if let Some(d) = distances[*y as usize][(x - 1) as usize] {
-                        if d > distance {
-                            next_nodes.insert((*y, (x - 1)));
-                        }
-                    } else {
-                        next_nodes.insert((*y, (x - 1)));
-                    }
-                }
-            }
-
-            if ((x + 1) as usize) < x_len {
-                if to_elevation(input[*y as usize][(x + 1) as usize]) <= elevation + 1 {
-                    if let Some(d) = distances[*y as usize][(x + 1) as usize] {
-                        if d > distance {
-                            next_nodes.insert((*y, x + 1));
-                        }
-                    } else {
-                        next_nodes.insert((*y, x + 1));
-                    }
-                }
-            }
-        }
-
-        for (y, x) in next_nodes.iter() {
-            distances[*y as usize][*x as usize] = Some(distance);
-
-            if input[*y as usize][*x as usize] == 'E' {
-                break 'outer distance;
             }
         }
 
