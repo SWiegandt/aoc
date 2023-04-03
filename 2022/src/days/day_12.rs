@@ -56,10 +56,6 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
         distance += 1;
 
         for (y, x) in current_nodes {
-            if input[y][x] == 'E' {
-                break 'outer distance - 1;
-            }
-
             let elevation = to_elevation(input[y][x]);
             let x_len = distances[y].len();
 
@@ -75,6 +71,10 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
         }
 
         current_nodes = next_nodes.into_iter().collect::<Vec<_>>();
+
+        if current_nodes.iter().any(|&(y, x)| input[y][x] == 'E') {
+            break 'outer distance;
+        }
     }
 }
 
