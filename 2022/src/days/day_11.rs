@@ -65,7 +65,7 @@ fn parse_monkeys(input: &String) -> Vec<Monkey> {
     monkeys
 }
 
-fn run_throws(monkeys: &mut Vec<Monkey>, rounds: usize, denominator: u64) -> u64 {
+fn run_throws(mut monkeys: Vec<Monkey>, rounds: usize, denominator: u64) -> u64 {
     let reduce_mod: u64 = monkeys.iter().map(|m| m.divisibility).product();
 
     for _ in 0..rounds {
@@ -88,16 +88,16 @@ fn run_throws(monkeys: &mut Vec<Monkey>, rounds: usize, denominator: u64) -> u64
     monkeys.iter().take(2).map(|m| m.inspections).product()
 }
 
-fn one(monkeys: &mut Vec<Monkey>) -> u64 {
+fn one(monkeys: Vec<Monkey>) -> u64 {
     run_throws(monkeys, 20, 3)
 }
 
-fn two(monkeys: &mut Vec<Monkey>) -> u64 {
+fn two(monkeys: Vec<Monkey>) -> u64 {
     run_throws(monkeys, 10000, 1)
 }
 
 pub fn run() -> (u64, u64) {
     let input = util::read_input(11).join("\n");
 
-    (one(&mut parse_monkeys(&input)), two(&mut parse_monkeys(&input)))
+    (one(parse_monkeys(&input)), two(parse_monkeys(&input)))
 }
