@@ -27,29 +27,24 @@ fn update_distances(
     }
 }
 
-fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
-    let mut current_nodes: Vec<(usize, usize)> = vec![];
+fn find_path<F: Fn(&char) -> bool>(input: &Map<char>, start: F) -> i32 {
     let mut distance = 0;
+    let y_len = input.len();
 
     let mut distances: Map<Option<i32>> = input
         .iter()
-        .enumerate()
-        .map(|(y, row)| {
-            row.iter()
-                .enumerate()
-                .map(|(x, c)| {
-                    if start(*c) {
-                        current_nodes.push((y, x));
-                        Some(distance)
-                    } else {
-                        None
-                    }
-                })
-                .collect()
-        })
+        .map(|row| row.iter().map(|&c| Some(c).filter(|c| start(c)).map(|_| 0)).collect())
         .collect();
 
-    let y_len = distances.len();
+    let mut current_nodes: Vec<(usize, usize)> = distances
+        .iter()
+        .enumerate()
+        .flat_map(|(y, row)| {
+            row.iter()
+                .enumerate()
+                .filter_map(move |(x, d)| d.filter(|&d| d == 0).map(|_| (y, x)))
+        })
+        .collect();
 
     loop {
         let mut next_nodes = HashSet::new();
@@ -79,11 +74,11 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
 }
 
 fn one(input: &Map<char>) -> i32 {
-    find_path(input, |c| c == 'S')
+    find_path(input, |&c| c == 'S')
 }
 
 fn two(input: &Map<char>) -> i32 {
-    find_path(input, |c| c == 'S' || c == 'a')
+    find_path(input, |&c| c == 'S' || c == 'a')
 }
 
 pub fn run() -> (i32, i32) {
