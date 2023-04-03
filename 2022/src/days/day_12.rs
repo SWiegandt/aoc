@@ -51,7 +51,7 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
 
     let y_len = distances.len();
 
-    'outer: loop {
+    loop {
         let mut next_nodes = HashSet::new();
         distance += 1;
 
@@ -73,7 +73,7 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
         current_nodes = next_nodes.into_iter().collect::<Vec<_>>();
 
         if current_nodes.iter().any(|&(y, x)| input[y][x] == 'E') {
-            break 'outer distance;
+            break distance;
         }
     }
 }
