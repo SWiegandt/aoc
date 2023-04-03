@@ -12,6 +12,21 @@ fn to_elevation(c: char) -> i32 {
     }
 }
 
+fn update_distances(
+    y: usize,
+    x: usize,
+    input: &Map<char>,
+    distances: &mut Map<Option<i32>>,
+    next_nodes: &mut HashSet<(usize, usize)>,
+    elevation: i32,
+    distance: i32,
+) {
+    if to_elevation(input[y][x]) <= elevation + 1 && distances[y][x].is_none() {
+        next_nodes.insert((y, x));
+        distances[y][x] = Some(distance);
+    }
+}
+
 fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
     let mut current_nodes: Vec<(usize, usize)> = vec![];
     let mut distance = 0;
@@ -51,22 +66,12 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
             [y.checked_sub(1), y.checked_add(1)]
                 .iter()
                 .filter_map(|&y| y.filter(|&y| y < y_len))
-                .for_each(|y| {
-                    if to_elevation(input[y][x]) <= elevation + 1 && distances[y][x].is_none() {
-                        next_nodes.insert((y, x));
-                        distances[y][x] = Some(distance);
-                    }
-                });
+                .for_each(|y| update_distances(y, x, &input, &mut distances, &mut next_nodes, elevation, distance));
 
             [x.checked_sub(1), x.checked_add(1)]
                 .iter()
                 .filter_map(|&x| x.filter(|&x| x < x_len))
-                .for_each(|x| {
-                    if to_elevation(input[y][x]) <= elevation + 1 && distances[y][x].is_none() {
-                        next_nodes.insert((y, x));
-                        distances[y][x] = Some(distance);
-                    }
-                });
+                .for_each(|x| update_distances(y, x, &input, &mut distances, &mut next_nodes, elevation, distance));
         }
 
         current_nodes = next_nodes.into_iter().collect::<Vec<_>>();
