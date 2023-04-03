@@ -34,7 +34,7 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
         })
         .collect();
 
-    let y_len = distances.len() as i32;
+    let y_len = distances.len();
 
     'outer: loop {
         distance += 1;
@@ -46,12 +46,11 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
             }
 
             let elevation = to_elevation(input[*y][*x]);
-            let x_len = distances[*y].len() as i32;
+            let x_len = distances[*y].len();
 
-            for y_neighbor in [(*y as i32) - 1, (*y as i32) + 1]
+            for y_neighbor in [y.checked_sub(1), y.checked_add(1)]
                 .iter()
-                .filter(|&&y| y >= 0 && y < y_len)
-                .map(|&y| y as usize)
+                .filter_map(|&y| y.filter(|&y| y < y_len))
             {
                 if to_elevation(input[y_neighbor][*x]) <= elevation + 1 {
                     if distances[y_neighbor][*x].is_none() {
@@ -61,10 +60,9 @@ fn find_path<F: Fn(char) -> bool>(input: &Map<char>, start: F) -> i32 {
                 }
             }
 
-            for x_neighbor in [(*x as i32) - 1, (*x as i32) + 1]
+            for x_neighbor in [x.checked_sub(1), x.checked_add(1)]
                 .iter()
-                .filter(|&&x| x >= 0 && x < x_len)
-                .map(|&x| x as usize)
+                .filter_map(|&x| x.filter(|&x| x < x_len))
             {
                 if to_elevation(input[*y][x_neighbor]) <= elevation + 1 {
                     if distances[*y][x_neighbor].is_none() {
