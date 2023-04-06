@@ -4,5 +4,5 @@ mod days;
 mod util;
 
 fn main() {
-    println!("{:?}", days::day_12::run());
+    println!("{:?}", days::day_13::run());
 }
