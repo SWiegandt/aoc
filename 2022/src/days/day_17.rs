@@ -230,7 +230,7 @@ fn one(input: &Vec<Move>) -> i64 {
     game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1
 }
 
-fn two(input: &Vec<Move>) -> i64 {
+fn two(_input: &Vec<Move>) -> i64 {
     2
 }
 
