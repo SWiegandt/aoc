@@ -4,16 +4,21 @@ use aoc2022::util::{read_input, ToInputVec};
 
 type Pos = (usize, usize, usize);
 
-fn get_size(input: &Vec<Vec<usize>>) -> usize {
-    *input.iter().map(|row| row.iter().max().unwrap()).max().unwrap() + 3
+fn get_size(input: &Vec<Vec<i32>>) -> usize {
+    input
+        .iter()
+        .map(|row| *row.iter().max().unwrap() as usize)
+        .max()
+        .unwrap()
+        + 3
 }
 
-fn init_lava(input: &Vec<Vec<usize>>, lava_size: usize) -> Vec<Vec<Vec<i32>>> {
+fn init_lava(input: &Vec<Vec<i32>>, lava_size: usize) -> Vec<Vec<Vec<i32>>> {
     let mut lava = vec![vec![vec![0; lava_size]; lava_size]; lava_size];
 
     for row in input {
         if let [x, y, z] = &row[..] {
-            lava[*x + 1][*y + 1][*z + 1] = 1;
+            lava[*x as usize + 1][*y as usize + 1][*z as usize + 1] = 1;
         }
     }
 
@@ -52,11 +57,11 @@ fn problem_two(input: &String) -> i32 {
     let mut area = 0;
     let lava_size = get_size(&input);
     let lava = init_lava(&input, lava_size);
-    let mut next_loop: HashSet<Pos> = HashSet::from([(0, 0, 0)]);
+    let mut next_loop: HashSet<(i32, i32, i32)> = HashSet::from([(0, 0, 0)]);
     let mut visited = HashSet::new();
 
     loop {
-        let current: HashSet<Pos> = next_loop.clone();
+        let current = next_loop.clone();
         next_loop.clear();
 
         if current.is_empty() {
@@ -65,7 +70,7 @@ fn problem_two(input: &String) -> i32 {
 
         for (x, y, z) in current {
             visited.insert((x, y, z));
-            area += get_area(&lava, lava_size, (x, y, z));
+            area += get_area(&lava, lava_size, (x as usize, y as usize, z as usize));
 
             for pos in [
                 (x - 1, y, z),
@@ -76,9 +81,9 @@ fn problem_two(input: &String) -> i32 {
                 (x, y, z + 1),
             ]
             .into_iter()
-            .filter(|(x, y, z)| [x, y, z].iter().all(|n| (0..lava_size).contains(n)))
+            .filter(|(x, y, z)| [x, y, z].iter().all(|n| (0..lava_size as i32).contains(n)))
             .filter(|pos| !visited.contains(pos))
-            .filter(|&(x, y, z)| lava[x][y][z] == 0)
+            .filter(|&(x, y, z)| lava[x as usize][y as usize][z as usize] == 0)
             {
                 if !next_loop.contains(&pos) {
                     next_loop.insert(pos);
@@ -90,7 +95,7 @@ fn problem_two(input: &String) -> i32 {
     area
 }
 
-fn parse_input(input: &String) -> Vec<Vec<usize>> {
+fn parse_input(input: &String) -> Vec<Vec<i32>> {
     input
         .to_vec()
         .iter()
@@ -105,7 +110,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "2,2,2
+    const TEST_INPUT: &str = "
+2,2,2
 1,2,2
 3,2,2
 2,1,2
@@ -122,11 +128,11 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 64);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 64);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 58);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 58);
     }
 }

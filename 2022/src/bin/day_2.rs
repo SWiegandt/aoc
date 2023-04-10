@@ -76,18 +76,19 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    const TEST_INPUT: &str = "A Y
+    const TEST_INPUT: &str = "
+A Y
 B X
 C Z
 ";
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 15);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 15);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 12);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 12);
     }
 }

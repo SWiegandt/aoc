@@ -14,15 +14,17 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    const TEST_INPUT: &str = "";
+    const TEST_INPUT: &str = "
+
+";
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), _);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), _);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), _);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), _);
     }
 }

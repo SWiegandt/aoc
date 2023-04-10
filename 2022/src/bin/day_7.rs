@@ -162,7 +162,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "$ cd /
+    const TEST_INPUT: &str = "
+$ cd /
 $ ls
 dir a
 14848514 b.txt
@@ -189,11 +190,11 @@ $ ls
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 95437);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 95437);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 24933642);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 24933642);
     }
 }

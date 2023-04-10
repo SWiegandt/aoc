@@ -44,7 +44,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "2-4,6-8
+    const TEST_INPUT: &str = "
+2-4,6-8
 2-3,4-5
 5-7,7-9
 2-8,3-7
@@ -54,11 +55,11 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 2);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 2);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 4);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 4);
     }
 }

@@ -105,7 +105,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "30373
+    const TEST_INPUT: &str = "
+30373
 25512
 65332
 33549
@@ -114,11 +115,11 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 21);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 21);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 8);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 8);
     }
 }

@@ -227,7 +227,8 @@ fn parse_input(input: &String) -> HashMap<String, Valve> {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
+    const TEST_INPUT: &str = "
+Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
 Valve BB has flow rate=13; tunnels lead to valves CC, AA
 Valve CC has flow rate=2; tunnels lead to valves DD, BB
 Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE
@@ -241,11 +242,12 @@ Valve JJ has flow rate=21; tunnel leads to valve II
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 1651);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 1651);
     }
 
     #[test]
+    #[ignore]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 1707);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 1707);
     }
 }

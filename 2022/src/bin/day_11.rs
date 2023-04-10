@@ -103,7 +103,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "Monkey 0:
+    const TEST_INPUT: &str = "
+Monkey 0:
 Starting items: 79, 98
 Operation: new = old * 19
 Test: divisible by 23
@@ -134,11 +135,11 @@ Test: divisible by 17
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 10605);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 10605);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 2713310158);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 2713310158);
     }
 }
