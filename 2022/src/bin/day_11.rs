@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use regex::Regex;
 
-use crate::util;
+use aoc2022::util::read_input;
 
 #[derive(Debug, Default)]
 struct Monkey {
@@ -88,16 +88,57 @@ fn run_throws(mut monkeys: Vec<Monkey>, rounds: usize, denominator: u64) -> u64 
     monkeys.iter().take(2).map(|m| m.inspections).product()
 }
 
-fn one(monkeys: Vec<Monkey>) -> u64 {
-    run_throws(monkeys, 20, 3)
+fn problem_one(monkeys: &String) -> u64 {
+    run_throws(parse_monkeys(monkeys), 20, 3)
 }
 
-fn two(monkeys: Vec<Monkey>) -> u64 {
-    run_throws(monkeys, 10000, 1)
+fn problem_two(monkeys: &String) -> u64 {
+    run_throws(parse_monkeys(monkeys), 10000, 1)
 }
 
-pub fn run() -> (u64, u64) {
-    let input = util::read_input(11).join("\n");
+fn main() {
+    let input = read_input(11);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
 
-    (one(parse_monkeys(&input)), two(parse_monkeys(&input)))
+mod tests {
+    const TEST_INPUT: &str = "Monkey 0:
+Starting items: 79, 98
+Operation: new = old * 19
+Test: divisible by 23
+    If true: throw to monkey 2
+    If false: throw to monkey 3
+
+Monkey 1:
+Starting items: 54, 65, 75, 74
+Operation: new = old + 6
+Test: divisible by 19
+    If true: throw to monkey 2
+    If false: throw to monkey 0
+
+Monkey 2:
+Starting items: 79, 60, 97
+Operation: new = old * old
+Test: divisible by 13
+    If true: throw to monkey 1
+    If false: throw to monkey 3
+
+Monkey 3:
+Starting items: 74
+Operation: new = old + 3
+Test: divisible by 17
+    If true: throw to monkey 0
+    If false: throw to monkey 1
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 10605);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 2713310158);
+    }
 }

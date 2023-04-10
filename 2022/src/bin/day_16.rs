@@ -2,7 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use regex::Regex;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(Debug, Clone)]
 struct Valve {
@@ -171,14 +171,20 @@ fn maximize_pressure_elephant(
     maximum
 }
 
-fn one(valves: &HashMap<String, Valve>, shortest_paths: &HashMap<String, Vec<(String, i32)>>) -> i32 {
-    maximize_pressure(valves, shortest_paths, HashSet::new(), &"AA".to_string(), 30)
+fn problem_one(input: &String) -> i32 {
+    let input = parse_input(input);
+    let shortest_paths = get_shortest_paths(&input);
+
+    maximize_pressure(&input, &shortest_paths, HashSet::new(), &"AA".to_string(), 30)
 }
 
-fn two(valves: &HashMap<String, Valve>, shortest_paths: &HashMap<String, Vec<(String, i32)>>) -> i32 {
+fn problem_two(input: &String) -> i32 {
+    let input = parse_input(input);
+    let shortest_paths = get_shortest_paths(&input);
+
     maximize_pressure_elephant(
-        valves,
-        shortest_paths,
+        &input,
+        &shortest_paths,
         HashSet::new(),
         &"AA".to_string(),
         &"AA".to_string(),
@@ -187,10 +193,18 @@ fn two(valves: &HashMap<String, Valve>, shortest_paths: &HashMap<String, Vec<(St
     )
 }
 
-pub fn run() -> (i32, i32) {
+fn main() {
+    let input = read_input(16);
+
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+fn parse_input(input: &String) -> HashMap<String, Valve> {
     let re = Regex::new(r"Valve (.+?) .* rate=(\d+);.*valves? (.+(, )?)+").unwrap();
 
-    let input: HashMap<String, Valve> = util::read_input(16)
+    input
+        .to_vec()
         .iter()
         .map(|s| {
             let captures = re.captures(s).unwrap();
@@ -209,9 +223,29 @@ pub fn run() -> (i32, i32) {
                 },
             )
         })
-        .collect();
+        .collect()
+}
 
-    let shortest_paths = get_shortest_paths(&input);
+mod tests {
+    const TEST_INPUT: &str = "Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
+Valve BB has flow rate=13; tunnels lead to valves CC, AA
+Valve CC has flow rate=2; tunnels lead to valves DD, BB
+Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE
+Valve EE has flow rate=3; tunnels lead to valves FF, DD
+Valve FF has flow rate=0; tunnels lead to valves EE, GG
+Valve GG has flow rate=0; tunnels lead to valves FF, HH
+Valve HH has flow rate=22; tunnel leads to valve GG
+Valve II has flow rate=0; tunnels lead to valves AA, JJ
+Valve JJ has flow rate=21; tunnel leads to valve II
+";
 
-    (one(&input, &shortest_paths), two(&input, &shortest_paths))
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 1651);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 1707);
+    }
 }

@@ -1,4 +1,4 @@
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 use regex::Regex;
 
 #[derive(Debug, Clone)]
@@ -101,15 +101,39 @@ where
     crates.iter().map(|col| col.get(0).unwrap().0).collect::<String>()
 }
 
-fn one(input: &Vec<String>) -> String {
-    run_moves(input, execute_move)
+fn problem_one(input: &String) -> String {
+    run_moves(&input.to_vec(), execute_move)
 }
 
-fn two(input: &Vec<String>) -> String {
-    run_moves(input, execute_multiple_moves)
+fn problem_two(input: &String) -> String {
+    run_moves(&input.to_vec(), execute_multiple_moves)
 }
 
-pub fn run() -> (String, String) {
-    let input = util::read_input(5);
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(5);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "    [D]    
+[N] [C]    
+[Z] [M] [P]
+    1   2   3 
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), "CMZ");
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), "MCD");
+    }
 }

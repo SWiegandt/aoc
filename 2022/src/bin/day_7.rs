@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use regex::Regex;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(Debug, Clone)]
 enum FileSystemItem {
@@ -130,16 +130,16 @@ fn get_directory_sizes(input: &Vec<String>) -> HashMap<String, i32> {
     sizes
 }
 
-fn one(input: &Vec<String>) -> i32 {
-    get_directory_sizes(input)
+fn problem_one(input: &String) -> i32 {
+    get_directory_sizes(&input.to_vec())
         .values()
         .filter(|&&size| size < 100000)
         .map(|&size| size)
         .sum::<i32>()
 }
 
-fn two(input: &Vec<String>) -> i32 {
-    let sizes = get_directory_sizes(input);
+fn problem_two(input: &String) -> i32 {
+    let sizes = get_directory_sizes(&input.to_vec());
     let root_size = *sizes.get("").unwrap();
     let space_to_free = root_size - 40000000;
     let mut smallest = root_size;
@@ -155,7 +155,45 @@ fn two(input: &Vec<String>) -> i32 {
     smallest.clone()
 }
 
-pub fn run() -> (i32, i32) {
-    let input = util::read_input(7);
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(7);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 95437);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 24933642);
+    }
 }
