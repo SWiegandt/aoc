@@ -50,7 +50,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    const TEST_INPUT: &str = "vJrwpWtwJgWrhcsFMMfFFhFp
+    const TEST_INPUT: &str = "
+vJrwpWtwJgWrhcsFMMfFFhFp
 jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
 PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
@@ -60,11 +61,11 @@ CrZsJsPPZsGzwwsLwLmpwMDw
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 157);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 157);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 70);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 70);
     }
 }

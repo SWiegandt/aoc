@@ -69,7 +69,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "addx 15
+    const TEST_INPUT: &str = "
+addx 15
 addx -11
 addx 6
 addx -3
@@ -219,13 +220,13 @@ noop
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one_and_two(&TEST_INPUT.to_string()).0, 13140);
+        assert_eq!(super::problem_one_and_two(&TEST_INPUT.trim().to_string()).0, 13140);
     }
 
     #[test]
     fn test_problem_two() {
         assert_eq!(
-            super::problem_one_and_two(&TEST_INPUT.to_string()).1,
+            super::problem_one_and_two(&TEST_INPUT.trim().to_string()).1,
             "
 ##..##..##..##..##..##..##..##..##..##..
 ###...###...###...###...###...###...###.

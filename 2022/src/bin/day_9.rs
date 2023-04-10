@@ -71,7 +71,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "R 4
+    const TEST_INPUT: &str = "
+R 4
 U 4
 L 3
 D 1
@@ -83,19 +84,21 @@ R 2
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 13);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 13);
     }
 
     #[test]
     fn test_problem_two() {
-        let test_input = "R 5
+        let test_input = "
+R 5
 U 8
 L 8
 D 3
 R 17
 D 10
 L 25
-U 20";
-        assert_eq!(super::problem_two(&test_input.to_string()), 36);
+U 20
+";
+        assert_eq!(super::problem_two(&test_input.trim().to_string()), 36);
     }
 }

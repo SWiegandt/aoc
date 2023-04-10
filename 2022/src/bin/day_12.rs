@@ -90,7 +90,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "Sabqponm
+    const TEST_INPUT: &str = "
+Sabqponm
 abcryxxl
 accszExk
 acctuvwj
@@ -99,11 +100,11 @@ abdefghi
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 31);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 31);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 29);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 29);
     }
 }

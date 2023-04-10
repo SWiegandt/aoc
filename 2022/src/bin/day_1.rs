@@ -37,7 +37,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    const TEST_INPUT: &str = "1000
+    const TEST_INPUT: &str = "
+1000
 2000
 3000
 
@@ -56,11 +57,11 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 24000);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim_start().to_string()), 24000);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 45000);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim_start().to_string()), 45000);
     }
 }

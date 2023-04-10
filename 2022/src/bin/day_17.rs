@@ -1,6 +1,6 @@
 use std::{collections::HashSet, fmt::Display};
 
-use aoc2022::util::{read_input, ToInputVec};
+use aoc2022::util::read_input;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct Pos(i64, i64);
@@ -92,32 +92,6 @@ impl From<char> for Move {
             _ => panic!(),
         }
     }
-}
-
-fn get_game_area_top(game_area: &Vec<Pos>) -> Option<Vec<Pos>> {
-    let mut columns: Vec<Vec<Pos>> = vec![];
-
-    for col in 0..=6 {
-        let col_max = game_area
-            .iter()
-            .filter_map(|&Pos(x, y)| if x == col as i64 { Some(y) } else { None })
-            .max()?;
-
-        columns.push(
-            game_area
-                .iter()
-                .filter_map(|&Pos(x, y)| {
-                    if x == col as i64 && y >= col_max {
-                        Some(Pos(x, y))
-                    } else {
-                        None
-                    }
-                })
-                .collect(),
-        );
-    }
-
-    Some(columns.into_iter().flatten().collect())
 }
 
 fn problem_one_and_two(input: &String, count_cycles: bool) -> i64 {
@@ -231,11 +205,14 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one_and_two(&TEST_INPUT.to_string(), false), 3068);
+        assert_eq!(super::problem_one_and_two(&TEST_INPUT.trim().to_string(), false), 3068);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_one_and_two(&TEST_INPUT.to_string(), true), 1514285714288);
+        assert_eq!(
+            super::problem_one_and_two(&TEST_INPUT.trim().to_string(), true),
+            1514285714288
+        );
     }
 }

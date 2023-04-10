@@ -167,7 +167,8 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "[1,1,3,1,1]
+    const TEST_INPUT: &str = "
+[1,1,3,1,1]
 [1,1,5,1,1]
 
 [[1],[2,3,4]]
@@ -194,7 +195,7 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 13);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 13);
     }
 
     #[test]

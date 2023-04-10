@@ -116,10 +116,11 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "    [D]    
-[N] [C]    
+    const TEST_INPUT: &str = "
+    [D]
+[N] [C]
 [Z] [M] [P]
-    1   2   3 
+    1   2   3
 
 move 1 from 2 to 1
 move 3 from 1 to 3
@@ -129,11 +130,11 @@ move 1 from 1 to 2
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), "CMZ");
+        assert_eq!(super::problem_one(&TEST_INPUT.trim_matches('\n').to_string()), "CMZ");
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), "MCD");
+        assert_eq!(super::problem_two(&TEST_INPUT.trim_matches('\n').to_string()), "MCD");
     }
 }

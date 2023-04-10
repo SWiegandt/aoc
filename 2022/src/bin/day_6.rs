@@ -39,11 +39,11 @@ mod tests {
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 7);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 7);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 19);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 19);
     }
 }

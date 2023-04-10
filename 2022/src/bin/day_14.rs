@@ -174,17 +174,18 @@ fn main() {
 }
 
 mod tests {
-    const TEST_INPUT: &str = "498,4 -> 498,6 -> 496,6
+    const TEST_INPUT: &str = "
+498,4 -> 498,6 -> 496,6
 503,4 -> 502,4 -> 502,9 -> 494,9
 ";
 
     #[test]
     fn test_problem_one() {
-        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 24);
+        assert_eq!(super::problem_one(&TEST_INPUT.trim().to_string()), 24);
     }
 
     #[test]
     fn test_problem_two() {
-        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 93);
+        assert_eq!(super::problem_two(&TEST_INPUT.trim().to_string()), 93);
     }
 }
