@@ -1,11 +1,19 @@
+use std::collections::HashSet;
+use std::fs::read_to_string;
 use std::hash::Hash;
-use std::{collections::HashSet, fs::File, io::BufRead};
 
-pub fn read_input(day: usize) -> Vec<String> {
-    let path = format!("./inputs/{}.txt", day.to_string());
-    let file = File::open(path).unwrap();
+pub trait ToInputVec {
+    fn to_vec(&self) -> Vec<String>;
+}
 
-    std::io::BufReader::new(file).lines().map(|row| row.unwrap()).collect()
+impl ToInputVec for String {
+    fn to_vec(&self) -> Vec<String> {
+        self.lines().map(|s| s.to_string()).collect()
+    }
+}
+
+pub fn read_input(day: usize) -> String {
+    read_to_string(format!("./inputs/{}.txt", day.to_string())).unwrap()
 }
 
 pub fn to_set<T, I>(col: I) -> HashSet<T>

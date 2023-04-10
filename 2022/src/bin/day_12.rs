@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 type Map<T> = Vec<Vec<T>>;
 
@@ -69,15 +69,41 @@ fn find_path<F: Fn(&char) -> bool>(input: &Map<char>, start: F) -> i32 {
     }
 }
 
-fn one(input: &Map<char>) -> i32 {
-    find_path(input, |&c| c == 'S')
+fn parse_input(input: &String) -> Map<char> {
+    input.to_vec().iter().map(|row| row.chars().collect()).collect()
 }
 
-fn two(input: &Map<char>) -> i32 {
-    find_path(input, |&c| c == 'S' || c == 'a')
+fn problem_one(input: &String) -> i32 {
+    let input = parse_input(input);
+    find_path(&input, |&c| c == 'S')
 }
 
-pub fn run() -> (i32, i32) {
-    let input = util::read_input(12).iter().map(|s| s.chars().collect()).collect();
-    (one(&input), two(&input))
+fn problem_two(input: &String) -> i32 {
+    let input = parse_input(input);
+    find_path(&input, |&c| c == 'S' || c == 'a')
+}
+
+fn main() {
+    let input = read_input(12);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "Sabqponm
+abcryxxl
+accszExk
+acctuvwj
+abdefghi
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 31);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 29);
+    }
 }

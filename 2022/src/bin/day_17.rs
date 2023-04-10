@@ -1,6 +1,6 @@
 use std::{collections::HashSet, fmt::Display};
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 struct Pos(i64, i64);
@@ -120,7 +120,8 @@ fn get_game_area_top(game_area: &Vec<Pos>) -> Option<Vec<Pos>> {
     Some(columns.into_iter().flatten().collect())
 }
 
-fn one(input: &Vec<Move>) -> i64 {
+fn problem_one_and_two(input: &String, count_cycles: bool) -> i64 {
+    let input: Vec<Move> = input.trim().chars().map(|c| c.into()).collect();
     let falling_shapes = [Shape::Line, Shape::Plus, Shape::Angle, Shape::Bar, Shape::Square]
         .iter()
         .cycle();
@@ -134,7 +135,13 @@ fn one(input: &Vec<Move>) -> i64 {
     let mut cycle_start_index: Option<usize> = None;
     let mut cycle_post_heights: Vec<i64> = vec![];
 
-    for (shape_index, shape) in falling_shapes.enumerate() {
+    let falling_shapes: Box<dyn Iterator<Item = (usize, &Shape)>> = if !count_cycles {
+        Box::new(falling_shapes.take(2022).enumerate())
+    } else {
+        Box::new(falling_shapes.enumerate())
+    };
+
+    for (shape_index, shape) in falling_shapes {
         let mut pos = starting_pos.clone();
 
         'outer: loop {
@@ -160,64 +167,47 @@ fn one(input: &Vec<Move>) -> i64 {
                 let translated_shape = shape.translate(&pos);
                 let shape_top = translated_shape.iter().map(|Pos(_, y)| y).max().unwrap();
                 starting_pos.1 = starting_pos.1.max(shape_top + 4);
-                let cycle_state = (pos.0, wind_index, shape.clone());
 
-                if cycle_states.contains(&cycle_state) {
-                    if cycle_saved_states.contains(&cycle_state) && cycle_saved_states.len() > 25 {
-                        let num_shapes = 1000000000000;
-                        let cycle_length = shape_index as i64 - cycle_start_index.unwrap() as i64;
-                        let cycles_left = (num_shapes - cycle_start_index.unwrap() as i64) / cycle_length;
-                        let cycle_height =
-                            game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1 - cycle_start_height.unwrap();
+                if count_cycles {
+                    let cycle_state = (pos.0, wind_index, shape.clone());
 
-                        println!(
-                            "floor(({} - {}) / {}) * {} + [{}]; cycles_left: {}",
-                            num_shapes,
-                            cycle_start_index.unwrap(),
-                            cycle_length,
-                            cycle_height,
-                            (num_shapes - cycles_left * cycle_length - (cycle_start_index.unwrap() as i64) - 1)
-                                as usize,
-                            cycles_left
-                        );
+                    if cycle_states.contains(&cycle_state) {
+                        if cycle_saved_states.contains(&cycle_state) && cycle_saved_states.len() > 25 {
+                            let num_shapes = 1000000000000;
+                            let cycle_length = shape_index as i64 - cycle_start_index.unwrap() as i64;
+                            let cycles_left = (num_shapes - cycle_start_index.unwrap() as i64) / cycle_length;
+                            let cycle_height =
+                                game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1 - cycle_start_height.unwrap();
 
-                        println!(
-                            "{}, {}, {}, {}",
-                            num_shapes,
-                            cycles_left,
-                            cycle_length,
-                            (cycle_start_index.unwrap() as i64)
-                        );
+                            let final_height = cycles_left as i64 * cycle_height
+                                + if num_shapes - cycles_left * cycle_length - cycle_start_index.unwrap() as i64 >= 0 {
+                                    cycle_post_heights[(num_shapes
+                                        - cycles_left * cycle_length
+                                        - cycle_start_index.unwrap() as i64)
+                                        as usize]
+                                } else {
+                                    cycle_start_height.unwrap()
+                                };
 
-                        let final_height = cycles_left as i64 * cycle_height
-                            + if num_shapes - cycles_left * cycle_length - cycle_start_index.unwrap() as i64 >= 0 {
-                                cycle_post_heights[(num_shapes
-                                    - cycles_left * cycle_length
-                                    - cycle_start_index.unwrap() as i64)
-                                    as usize]
-                            } else {
-                                cycle_start_height.unwrap()
-                            };
+                            return final_height;
+                        } else {
+                            cycle_post_heights.push(game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1);
+                        }
 
-                        println!("{final_height}");
-
-                        return 0;
+                        cycle_saved_states.push(cycle_state.clone());
+                        cycle_start_height =
+                            cycle_start_height.or(Some(game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1));
+                        cycle_start_index = cycle_start_index.or(Some(shape_index));
                     } else {
-                        cycle_post_heights.push(game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1);
+                        cycle_post_heights.clear();
+                        cycle_saved_states.clear();
+                        cycle_start_height = None;
+                        cycle_start_index = None;
                     }
 
-                    cycle_saved_states.push(cycle_state.clone());
-                    cycle_start_height =
-                        cycle_start_height.or(Some(game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1));
-                    cycle_start_index = cycle_start_index.or(Some(shape_index));
-                } else {
-                    cycle_post_heights.clear();
-                    cycle_saved_states.clear();
-                    cycle_start_height = None;
-                    cycle_start_index = None;
+                    cycle_states.insert(cycle_state);
                 }
 
-                cycle_states.insert(cycle_state);
                 break 'outer;
             }
         }
@@ -230,11 +220,22 @@ fn one(input: &Vec<Move>) -> i64 {
     game_area.iter().map(|&Pos(_, y)| y).max().unwrap() + 1
 }
 
-fn two(_input: &Vec<Move>) -> i64 {
-    2
+fn main() {
+    let input = read_input(17);
+    println!("Problem one: {}", problem_one_and_two(&input, false));
+    println!("Problem two: {}", problem_one_and_two(&input, true));
 }
 
-pub fn run() -> (i64, i64) {
-    let input: Vec<Move> = util::read_input(17)[0].chars().map(|c| c.into()).collect();
-    (one(&input), two(&input))
+mod tests {
+    const TEST_INPUT: &str = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one_and_two(&TEST_INPUT.to_string(), false), 3068);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_one_and_two(&TEST_INPUT.to_string(), true), 1514285714288);
+    }
 }

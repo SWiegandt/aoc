@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 type Pos = (usize, usize, usize);
 
@@ -30,10 +30,11 @@ fn get_area(lava: &Vec<Vec<Vec<i32>>>, lava_size: usize, (x, y, z): Pos) -> i32 
             + if z < lava_size - 1 { lava[x][y][z + 1] } else { 0 })
 }
 
-fn one(input: &Vec<Vec<usize>>) -> i32 {
+fn problem_one(input: &String) -> i32 {
+    let input = parse_input(input);
     let mut area = 0;
     let lava_size = get_size(&input);
-    let lava = init_lava(input, lava_size);
+    let lava = init_lava(&input, lava_size);
 
     for x in 0..lava_size {
         for y in 0..lava_size {
@@ -46,10 +47,11 @@ fn one(input: &Vec<Vec<usize>>) -> i32 {
     area
 }
 
-fn two(input: &Vec<Vec<usize>>) -> i32 {
+fn problem_two(input: &String) -> i32 {
+    let input = parse_input(input);
     let mut area = 0;
     let lava_size = get_size(&input);
-    let lava = init_lava(input, lava_size);
+    let lava = init_lava(&input, lava_size);
     let mut next_loop: HashSet<Pos> = HashSet::from([(0, 0, 0)]);
     let mut visited = HashSet::new();
 
@@ -88,15 +90,43 @@ fn two(input: &Vec<Vec<usize>>) -> i32 {
     area
 }
 
-pub fn run() -> (i32, i32) {
-    let input: Vec<Vec<usize>> = util::read_input(18)
+fn parse_input(input: &String) -> Vec<Vec<usize>> {
+    input
+        .to_vec()
         .iter()
-        .map(|row| {
-            row.split(",")
-                .map(|s| s.to_string().parse::<usize>().unwrap())
-                .collect()
-        })
-        .collect();
+        .map(|row| row.split(",").map(|s| s.to_string().parse().unwrap()).collect())
+        .collect()
+}
 
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(18);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "2,2,2
+1,2,2
+3,2,2
+2,1,2
+2,3,2
+2,2,1
+2,2,3
+2,2,4
+2,2,6
+1,2,5
+3,2,5
+2,1,5
+2,3,5
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 64);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 58);
+    }
 }

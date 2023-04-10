@@ -1,4 +1,4 @@
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 fn visible_from_left(rows: &Vec<Vec<i32>>) -> Vec<Vec<bool>> {
     rows.iter()
@@ -52,10 +52,11 @@ fn num_visible_to_right(row: &Vec<i32>, index: usize) -> usize {
     row.len() - index - 1
 }
 
-fn one(input: &Vec<Vec<i32>>) -> i32 {
-    let transposed = transpose(input);
-    let left = visible_from_left(input);
-    let right = visible_from_right(input);
+fn problem_one(input: &String) -> i32 {
+    let input = parse_input(input);
+    let transposed = transpose(&input);
+    let left = visible_from_left(&input);
+    let right = visible_from_right(&input);
     let top = visible_from_left(&transposed);
     let bottom = visible_from_right(&transposed);
     let mut visible = 0;
@@ -71,8 +72,9 @@ fn one(input: &Vec<Vec<i32>>) -> i32 {
     visible
 }
 
-fn two(input: &Vec<Vec<i32>>) -> i32 {
-    let transposed = transpose(input);
+fn problem_two(input: &String) -> i32 {
+    let input = parse_input(input);
+    let transposed = transpose(&input);
     let mut max_scenic = 0;
 
     for (n, row) in input.iter().enumerate() {
@@ -88,11 +90,35 @@ fn two(input: &Vec<Vec<i32>>) -> i32 {
     max_scenic as i32
 }
 
-pub fn run() -> (i32, i32) {
-    let input = util::read_input(8)
+fn parse_input(input: &String) -> Vec<Vec<i32>> {
+    input
+        .to_vec()
         .iter()
-        .map(|row| row.chars().map(|c| c.to_string().parse().unwrap()).collect())
-        .collect();
+        .map(|row| row.chars().map(|c| c.to_digit(10).unwrap() as i32).collect())
+        .collect()
+}
 
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(8);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "30373
+25512
+65332
+33549
+35390
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 21);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 8);
+    }
 }

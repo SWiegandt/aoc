@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use crate::util;
+use aoc2022::util::read_input;
 
 struct Move(char, i32);
 
@@ -44,20 +44,58 @@ fn run_moves(input: &Vec<Move>, mut rope: Vec<Pos>) -> usize {
     seen.len()
 }
 
-fn one(input: &Vec<Move>) -> usize {
-    run_moves(input, vec![Pos(0, 0); 2])
+fn problem_one(input: &String) -> usize {
+    let input = parse_input(&input);
+    run_moves(&input, vec![Pos(0, 0); 2])
 }
 
-fn two(input: &Vec<Move>) -> usize {
-    run_moves(input, vec![Pos(0, 0); 10])
+fn problem_two(input: &String) -> usize {
+    let input = parse_input(&input);
+    run_moves(&input, vec![Pos(0, 0); 10])
 }
 
-pub fn run() -> (usize, usize) {
-    let input = util::read_input(9)
-        .iter()
-        .map(|row| row.split_once(' ').unwrap())
-        .map(|(dir, num)| Move(dir.chars().nth(0).unwrap(), num.parse().unwrap()))
-        .collect();
+fn parse_input(input: &String) -> Vec<Move> {
+    input
+        .lines()
+        .map(|row| {
+            let (dir, num) = row.split_once(" ").unwrap();
+            Move(dir.chars().nth(0).unwrap(), num.parse().unwrap())
+        })
+        .collect()
+}
 
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(9);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "R 4
+U 4
+L 3
+D 1
+R 4
+D 1
+L 5
+R 2
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 13);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        let test_input = "R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20";
+        assert_eq!(super::problem_two(&test_input.to_string()), 36);
+    }
 }

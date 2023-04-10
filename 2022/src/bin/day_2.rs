@@ -1,4 +1,4 @@
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 use Move::*;
 
@@ -60,15 +60,34 @@ fn sum_results<F: Fn(&str, &str) -> (Move, Move)>(input: &Vec<String>, f: F) -> 
         .sum()
 }
 
-fn one(input: &Vec<String>) -> i32 {
-    sum_results(input, |l, r| (to_move(l), to_move(r)))
+fn problem_one(input: &String) -> i32 {
+    sum_results(&input.to_vec(), |l, r| (to_move(l), to_move(r)))
 }
 
-fn two(input: &Vec<String>) -> i32 {
-    sum_results(input, to_result)
+fn problem_two(input: &String) -> i32 {
+    sum_results(&input.to_vec(), to_result)
 }
 
-pub fn run() -> (i32, i32) {
-    let input = util::read_input(2);
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(2);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+#[cfg(test)]
+mod tests {
+    const TEST_INPUT: &str = "A Y
+B X
+C Z
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 15);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 12);
+    }
 }

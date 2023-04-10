@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(Clone, PartialEq, Eq)]
 enum PacketItem {
@@ -119,8 +119,9 @@ fn parse_packet(packet_str: &String) -> PacketItem {
     stack.pop().unwrap()
 }
 
-fn one(input: &Vec<String>) -> usize {
+fn problem_one(input: &String) -> usize {
     input
+        .to_vec()
         .iter()
         .filter(|&s| s != "")
         .collect::<Vec<_>>()
@@ -139,10 +140,12 @@ fn one(input: &Vec<String>) -> usize {
         .sum()
 }
 
-fn two(input: &mut Vec<String>) -> usize {
+fn problem_two(input: &String) -> usize {
+    let mut input = input.to_vec();
     input.extend(vec!["[[2]]".to_string(), "[[6]]".to_string()]);
 
     let mut parsed = input
+        .to_vec()
         .iter()
         .filter(|&s| s != "")
         .map(|s| parse_packet(s))
@@ -157,7 +160,45 @@ fn two(input: &mut Vec<String>) -> usize {
         .product()
 }
 
-pub fn run() -> (usize, usize) {
-    let mut input = util::read_input(13);
-    (one(&input), two(&mut input))
+fn main() {
+    let input = read_input(13);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "[1,1,3,1,1]
+[1,1,5,1,1]
+
+[[1],[2,3,4]]
+[[1],4]
+
+[9]
+[[8,7,6]]
+
+[[4,4],4,4]
+[[4,4],4,4,4]
+
+[7,7,7,7]
+[7,7,7]
+
+[]
+[3]
+
+[[[]]]
+[[]]
+
+[1,[2,[3,[4,[5,6,7]]]],8,9]
+[1,[2,[3,[4,[5,6,0]]]],8,9]
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 13);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&mut TEST_INPUT.to_string()), 140);
+    }
 }

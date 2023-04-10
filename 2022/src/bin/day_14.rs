@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt::Display};
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(Clone, Debug)]
 enum Material {
@@ -58,7 +58,8 @@ impl Display for Map {
     }
 }
 
-fn one(mut map: HashMap<(i32, i32), Material>) -> i32 {
+fn problem_one(input: &String) -> i32 {
+    let mut map = parse_input(input);
     let mut sands_at_rest = 0;
     let max_y = map.keys().map(|(y, _)| y).max().unwrap().clone();
     let mut last_path = vec![(0, 500)];
@@ -93,7 +94,8 @@ fn one(mut map: HashMap<(i32, i32), Material>) -> i32 {
     sands_at_rest
 }
 
-fn two(mut map: HashMap<(i32, i32), Material>) -> i32 {
+fn problem_two(input: &String) -> i32 {
+    let mut map = parse_input(input);
     let mut sands_at_rest = 0;
     let max_y = map.keys().map(|(y, _)| y).max().unwrap().clone();
     let mut last_path = vec![(0, 500)];
@@ -134,8 +136,9 @@ fn two(mut map: HashMap<(i32, i32), Material>) -> i32 {
     sands_at_rest
 }
 
-pub fn run() -> (i32, i32) {
-    let input: Vec<Vec<(i32, i32)>> = util::read_input(14)
+fn parse_input(input: &String) -> HashMap<(i32, i32), Material> {
+    let input: Vec<Vec<(i32, i32)>> = input
+        .to_vec()
         .iter()
         .map(|s| {
             let coords = s.split(" -> ");
@@ -161,5 +164,27 @@ pub fn run() -> (i32, i32) {
         }
     }
 
-    (one(map.clone()), two(map.clone()))
+    map
+}
+
+fn main() {
+    let input = read_input(14);
+    println!("Problem one: {}", problem_one(&input));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "498,4 -> 498,6 -> 496,6
+503,4 -> 502,4 -> 502,9 -> 494,9
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string()), 24);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 93);
+    }
 }

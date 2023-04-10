@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use regex::Regex;
 
-use crate::util;
+use aoc2022::util::{read_input, ToInputVec};
 
 #[derive(Debug, PartialEq, Eq, Hash)]
 struct Pos(i32, i32);
@@ -126,11 +126,12 @@ fn find_non_beacon_intervals(input: &Vec<(Pos, Pos)>, target: i32, bounds: Optio
     intervals
 }
 
-fn one(input: &Vec<(Pos, Pos)>) -> i32 {
-    find_non_beacon_intervals(input, 2000000, None).length()
+fn problem_one(input: &String, target: i32) -> i32 {
+    find_non_beacon_intervals(&parse_input(input), target, None).length()
 }
 
-fn two(input: &Vec<(Pos, Pos)>) -> u64 {
+fn problem_two(input: &String) -> u64 {
+    let input = parse_input(input);
     let bound = 4000000;
     let units = input
         .iter()
@@ -138,7 +139,7 @@ fn two(input: &Vec<(Pos, Pos)>) -> u64 {
         .collect::<HashSet<_>>();
 
     for target in 0..=bound {
-        let intervals = find_non_beacon_intervals(input, target, Some((0, bound)));
+        let intervals = find_non_beacon_intervals(&input, target, Some((0, bound)));
 
         if let IntervalUnion::Union(is) = intervals {
             if let &[i1, i2] = &is[..] {
@@ -154,10 +155,11 @@ fn two(input: &Vec<(Pos, Pos)>) -> u64 {
     panic!()
 }
 
-pub fn run() -> (i32, u64) {
+fn parse_input(input: &String) -> Vec<(Pos, Pos)> {
     let re = Regex::new(r"x=(-?\d+), y=(-?\d+).*x=(-?\d+), y=(-?\d+)").unwrap();
 
-    let input: Vec<(Pos, Pos)> = util::read_input(15)
+    input
+        .to_vec()
         .iter()
         .map(|s| {
             let captures = re.captures(s).unwrap();
@@ -172,7 +174,39 @@ pub fn run() -> (i32, u64) {
                 ),
             )
         })
-        .collect();
+        .collect()
+}
 
-    (one(&input), two(&input))
+fn main() {
+    let input = read_input(15);
+    println!("Problem one: {}", problem_one(&input, 2000000));
+    println!("Problem two: {}", problem_two(&input));
+}
+
+mod tests {
+    const TEST_INPUT: &str = "Sensor at x=2, y=18: closest beacon is at x=-2, y=15
+Sensor at x=9, y=16: closest beacon is at x=10, y=16
+Sensor at x=13, y=2: closest beacon is at x=15, y=3
+Sensor at x=12, y=14: closest beacon is at x=10, y=16
+Sensor at x=10, y=20: closest beacon is at x=10, y=16
+Sensor at x=14, y=17: closest beacon is at x=10, y=16
+Sensor at x=8, y=7: closest beacon is at x=2, y=10
+Sensor at x=2, y=0: closest beacon is at x=2, y=10
+Sensor at x=0, y=11: closest beacon is at x=2, y=10
+Sensor at x=20, y=14: closest beacon is at x=25, y=17
+Sensor at x=17, y=20: closest beacon is at x=21, y=22
+Sensor at x=16, y=7: closest beacon is at x=15, y=3
+Sensor at x=14, y=3: closest beacon is at x=15, y=3
+Sensor at x=20, y=1: closest beacon is at x=15, y=3
+";
+
+    #[test]
+    fn test_problem_one() {
+        assert_eq!(super::problem_one(&TEST_INPUT.to_string(), 10), 26);
+    }
+
+    #[test]
+    fn test_problem_two() {
+        assert_eq!(super::problem_two(&TEST_INPUT.to_string()), 56000011);
+    }
 }
