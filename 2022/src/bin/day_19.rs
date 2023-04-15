@@ -192,6 +192,10 @@ fn parse_input(input: &String) -> Vec<Blueprint> {
 fn get_max_geodes(blueprint: &Blueprint, robots: Vec<Robot>, mut resources: Resources, start: i32, stop: i32) -> i32 {
     let mut max_geode = 0;
 
+    let time_until_geode = blueprint
+        .next_robot_build(&resources, &robots, &Robot::Geode)
+        .map(|(n, _)| n);
+
     for robot in [Robot::Ore, Robot::Clay, Robot::Obsidian, Robot::Geode] {
         if robots.iter().filter(|&r| r == &robot).count() as i32
             >= blueprint.0.values().map(|r| r.from_robot(&robot)).max().unwrap()
@@ -201,7 +205,9 @@ fn get_max_geodes(blueprint: &Blueprint, robots: Vec<Robot>, mut resources: Reso
         }
 
         if let Some((time_until_build, robot_cost)) = blueprint.next_robot_build(&resources, &robots, &robot) {
-            if time_until_build >= stop - start {
+            if time_until_build >= stop - start
+                || (time_until_geode.map(|n| n <= time_until_build).unwrap_or(false) && robot != Robot::Geode)
+            {
                 continue;
             }
 
