@@ -13,12 +13,7 @@ fn mix(input: &mut Vec<(usize, i64)>) {
             .enumerate()
             .find(|(_, &(original_pos, _))| original_pos == i)
         {
-            let end_pos = (if pos as i64 + num >= 0 {
-                pos as i64 + num
-            } else {
-                input_len + (pos as i64 + num) - 1
-            })
-            .rem_euclid(input_len - 1) as usize;
+            let end_pos = (pos as i64 + num).rem_euclid(input_len - 1) as usize;
 
             if end_pos >= pos {
                 for i in pos..end_pos {
