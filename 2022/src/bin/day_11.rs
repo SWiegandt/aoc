@@ -39,7 +39,18 @@ impl Monkey {
 }
 
 fn parse_monkeys(input: &String) -> Vec<Monkey> {
-    let monkey_re = Regex::new(r"Monkey (\d+):\s+Starting items: (.+)\s+Operation: new = old (.+) (.+)\s+Test: divisible by (\d+)\s+If true: throw to monkey (\d+)\s+If false: throw to monkey (\d+)").unwrap();
+    let monkey_re = Regex::new(
+        r"
+Monkey (\d+):\s+Starting items: (.+)
+  Operation: new = old (.+) (.+)
+  Test: divisible by (\d+)
+    If true: throw to monkey (\d+)
+    If false: throw to monkey (\d+)
+    "
+        .trim(),
+    )
+    .unwrap();
+
     let mut monkeys = vec![];
 
     for m in monkey_re.captures_iter(input.as_str()) {
@@ -105,30 +116,30 @@ fn main() {
 mod tests {
     const TEST_INPUT: &str = "
 Monkey 0:
-Starting items: 79, 98
-Operation: new = old * 19
-Test: divisible by 23
+  Starting items: 79, 98
+  Operation: new = old * 19
+  Test: divisible by 23
     If true: throw to monkey 2
     If false: throw to monkey 3
 
 Monkey 1:
-Starting items: 54, 65, 75, 74
-Operation: new = old + 6
-Test: divisible by 19
+  Starting items: 54, 65, 75, 74
+  Operation: new = old + 6
+  Test: divisible by 19
     If true: throw to monkey 2
     If false: throw to monkey 0
 
 Monkey 2:
-Starting items: 79, 60, 97
-Operation: new = old * old
-Test: divisible by 13
+  Starting items: 79, 60, 97
+  Operation: new = old * old
+  Test: divisible by 13
     If true: throw to monkey 1
     If false: throw to monkey 3
 
 Monkey 3:
-Starting items: 74
-Operation: new = old + 3
-Test: divisible by 17
+  Starting items: 74
+  Operation: new = old + 3
+  Test: divisible by 17
     If true: throw to monkey 0
     If false: throw to monkey 1
 ";
