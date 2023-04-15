@@ -1,15 +1,15 @@
 use aoc2022::util::read_input;
 
-fn parse_input(input: &String) -> _ {}
+fn parse_input(input: &String) {}
 
-fn problem_one(input: &String) -> _ {}
+fn problem_one(input: &String) {}
 
-fn problem_two(input: &String) -> _ {}
+fn problem_two(input: &String) {}
 
 fn main() {
     let input = read_input(_);
-    println!("Problem one: {}", problem_one(&input));
-    println!("Problem two: {}", problem_two(&input));
+    println!("Problem one: {:?}", problem_one(&input));
+    println!("Problem two: {:?}", problem_two(&input));
 }
 
 #[cfg(test)]

@@ -195,7 +195,6 @@ fn problem_two(input: &String) -> i32 {
 
 fn main() {
     let input = read_input(16);
-
     println!("Problem one: {}", problem_one(&input));
     println!("Problem two: {}", problem_two(&input));
 }
