@@ -66,12 +66,9 @@ fn problem_one(input: &String) -> String {
     to_snafu(decimals.sum()).unwrap()
 }
 
-fn problem_two(input: &String) {}
-
 fn main() {
     let input = read_input(25);
     println!("Problem one: {:?}", problem_one(&input));
-    println!("Problem two: {:?}", problem_two(&input));
 }
 
 #[cfg(test)]
