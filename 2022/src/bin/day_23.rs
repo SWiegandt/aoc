@@ -34,7 +34,7 @@ fn bounding_rectangle(map: &Map) -> ((i32, i32), (i32, i32), i32) {
     ((min_x, max_x), (min_y, max_y), elves_in_rectangle)
 }
 
-fn print_map((min_x, max_x): (i32, i32), (min_y, max_y): (i32, i32), map: &Map) {
+fn _print_map((min_x, max_x): (i32, i32), (min_y, max_y): (i32, i32), map: &Map) {
     for y in min_y..=max_y {
         for x in min_x..=max_x {
             if map.contains_key(&(x, y)) {

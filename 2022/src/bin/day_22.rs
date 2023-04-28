@@ -87,7 +87,7 @@ impl Display for Sprite {
     }
 }
 
-fn print_map(map: &Map, sprite: &Sprite) {
+fn _print_map(map: &Map, sprite: &Sprite) {
     for (y, row) in map.iter().enumerate() {
         for (x, tile) in row.iter().enumerate() {
             if sprite.0 == (y, x) {
