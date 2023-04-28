@@ -79,7 +79,7 @@ fn parse_input(input: &String) -> HashMap<Point, Vec<Direction>> {
     map
 }
 
-fn print_map(map: &Map, map_width: i32, map_height: i32) {
+fn _print_map(map: &Map, map_width: i32, map_height: i32) {
     println!("#.{}", "#".repeat(map_width as usize));
 
     for y in 1..=map_height {
