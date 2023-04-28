@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 func ReadInput(day int) string {
@@ -13,5 +14,5 @@ func ReadInput(day int) string {
 		log.Fatal(err)
 	}
 
-	return string(data)
+	return strings.TrimSpace(string(data))
 }
