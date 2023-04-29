@@ -1,25 +1,32 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestProblems(t *testing.T) {
-	input := ""
+	t.Run("Problem one", func(t *testing.T) {
+		input := `
 
-	{
-		ans := ProblemOne(input)
+`
+		ans := ProblemOne(strings.TrimSpace(input))
 		expected := _
 
 		if ans != expected {
 			t.Errorf("Problem one result incorrect: got %d, expected %d", ans, expected)
 		}
-	}
+	})
 
-	{
-		ans := ProblemTwo(input)
-		expected := _
+	// 	t.Run("Problem two", func (t *testing.T) {
+	// 		input := `
 
-		if ans != expected {
-			t.Errorf("Problem two result incorrect: got %d, expected %d", ans, expected)
-		}
-	}
+	// `
+	// 		ans := ProblemTwo(strings.TrimSpace(input))
+	// 		expected := _
+
+	// 		if ans != expected {
+	// 			t.Errorf("Problem two result incorrect: got %d, expected %d", ans, expected)
+	// 		}
+	// 	})
 }
