@@ -43,7 +43,7 @@ func ProblemOne(input string) int {
 }
 
 func ProblemTwo(input string) int {
-	return len(iterate(input, 40))
+	return len(iterate(input, 50))
 }
 
 func main() {
