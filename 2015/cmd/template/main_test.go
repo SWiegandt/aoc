@@ -6,10 +6,10 @@ import (
 )
 
 func TestProblems(t *testing.T) {
-	t.Run("Problem one", func(t *testing.T) {
-		input := `
+	input := `
 
 `
+	t.Run("Problem one", func(t *testing.T) {
 		ans := ProblemOne(strings.TrimSpace(input))
 		expected := _
 
