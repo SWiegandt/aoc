@@ -45,7 +45,7 @@ func ProblemTwo(input string) int {
 
 	for _, line := range strings.Split(input, "\n") {
 		buffer := make([]rune, 3)
-		buffers := make(map[string]interface{})
+		buffers := make(util.Set[string])
 		hasOffsetCharDouble := false
 		hasDigraphDouble := false
 
@@ -58,7 +58,7 @@ func ProblemTwo(input string) int {
 				hasDigraphDouble = true
 			}
 
-			buffers[string(buffer[1:])] = nil
+			buffers.Add(string(buffer[1:]))
 		}
 
 		if hasOffsetCharDouble && hasDigraphDouble {
