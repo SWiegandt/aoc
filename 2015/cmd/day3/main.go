@@ -13,7 +13,7 @@ func presents(input string, units int) int {
 		positions[i] = util.Point{X: 0, Y: 0}
 	}
 
-	visited := map[util.Point]bool{positions[0]: true}
+	visited := util.Set[util.Point]{positions[0]: nil}
 
 	for i, chr := range input {
 		pos := &positions[i%units]
@@ -29,7 +29,7 @@ func presents(input string, units int) int {
 			pos.Y -= 1
 		}
 
-		visited[*pos] = true
+		visited.Add(*pos)
 	}
 
 	return len(visited)
