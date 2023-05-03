@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/SWiegandt/aoc/2015/pkg/util"
 )
 
@@ -10,14 +11,17 @@ func sumJsonObject(obj map[string]interface{}, ignoreRed bool) float64 {
 	var sum float64
 
 	for _, value := range obj {
-		if parsed, ok := value.(map[string]interface{}); ok {
+		switch parsed := value.(type) {
+		case map[string]interface{}:
 			sum += sumJsonObject(parsed, ignoreRed)
-		} else if parsed, ok := value.([]interface{}); ok {
+		case []interface{}:
 			sum += sumJsonArray(parsed, ignoreRed)
-		} else if parsed, ok := value.(float64); ok {
+		case float64:
 			sum += parsed
-		} else if parsed, ok := value.(string); ok && parsed == "red" && ignoreRed {
-			return 0
+		case string:
+			if parsed == "red" && ignoreRed {
+				return 0
+			}
 		}
 	}
 
@@ -28,11 +32,12 @@ func sumJsonArray(arr []interface{}, ignoreRed bool) float64 {
 	var sum float64
 
 	for _, value := range arr {
-		if parsed, ok := value.(map[string]interface{}); ok {
+		switch parsed := value.(type) {
+		case map[string]interface{}:
 			sum += sumJsonObject(parsed, ignoreRed)
-		} else if parsed, ok := value.([]interface{}); ok {
+		case []interface{}:
 			sum += sumJsonArray(parsed, ignoreRed)
-		} else if parsed, ok := value.(float64); ok {
+		case float64:
 			sum += parsed
 		}
 	}
@@ -41,13 +46,14 @@ func sumJsonArray(arr []interface{}, ignoreRed bool) float64 {
 }
 
 func sumJson(obj interface{}, ignoreRed bool) float64 {
-	if parsed, ok := obj.(map[string]interface{}); ok {
+	switch parsed := obj.(type) {
+	case map[string]interface{}:
 		return sumJsonObject(parsed, ignoreRed)
-	} else if parsed, ok := obj.([]interface{}); ok {
+	case []interface{}:
 		return sumJsonArray(parsed, ignoreRed)
+	default:
+		return obj.(float64)
 	}
-
-	return obj.(float64)
 }
 
 func ProblemOne(input string) float64 {
