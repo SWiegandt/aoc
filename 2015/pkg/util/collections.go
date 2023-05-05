@@ -63,3 +63,13 @@ func (s Set[T]) Difference(t Set[T]) Set[T] {
 func (s Set[T]) Without(v T) Set[T] {
 	return s.Difference(Set[T]{v: nil})
 }
+
+func (s Set[T]) Slice() []T {
+	slice := make([]T, 0, len(s))
+
+	for k := range s {
+		slice = append(slice, k)
+	}
+
+	return slice
+}
