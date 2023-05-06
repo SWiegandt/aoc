@@ -25,3 +25,23 @@ func Max[T constraints.Ordered](values ...T) T {
 
 	return max
 }
+
+func Sum[T constraints.Integer](arr []T) T {
+	var sum T
+
+	for _, value := range arr {
+		sum += value
+	}
+
+	return sum
+}
+
+func Product[T constraints.Integer](arr []T) T {
+	var product T = 1
+
+	for _, value := range arr {
+		product *= value
+	}
+
+	return product
+}
