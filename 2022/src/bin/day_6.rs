@@ -34,6 +34,7 @@ fn main() {
     println!("Problem two: {}", problem_two(&input));
 }
 
+#[cfg(test)]
 mod tests {
     const TEST_INPUT: &str = "mjqjpqmgbljsphdztnvjfqwrcgsmlb";
 

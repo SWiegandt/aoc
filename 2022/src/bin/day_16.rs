@@ -225,6 +225,7 @@ fn parse_input(input: &String) -> HashMap<String, Valve> {
         .collect()
 }
 
+#[cfg(test)]
 mod tests {
     const TEST_INPUT: &str = "
 Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
