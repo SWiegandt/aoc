@@ -68,6 +68,7 @@ fn main() {
     println!("Problem two: \n{}", output);
 }
 
+#[cfg(test)]
 mod tests {
     const TEST_INPUT: &str = "
 addx 15

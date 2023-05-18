@@ -200,6 +200,7 @@ fn main() {
     println!("Problem two: {}", problem_one_and_two(&input, true));
 }
 
+#[cfg(test)]
 mod tests {
     const TEST_INPUT: &str = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>";
 
