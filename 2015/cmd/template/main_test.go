@@ -18,15 +18,12 @@ func TestProblems(t *testing.T) {
 		}
 	})
 
-	// 	t.Run("Problem two", func (t *testing.T) {
-	// 		input := `
+	// t.Run("Problem two", func(t *testing.T) {
+	// 	ans := ProblemTwo(strings.TrimSpace(input))
+	// 	expected := _
 
-	// `
-	// 		ans := ProblemTwo(strings.TrimSpace(input))
-	// 		expected := _
-
-	// 		if ans != expected {
-	// 			t.Errorf("Problem two result incorrect: got %d, expected %d", ans, expected)
-	// 		}
-	// 	})
+	// 	if ans != expected {
+	// 		t.Errorf("Problem two result incorrect: got %d, expected %d", ans, expected)
+	// 	}
+	// })
 }
