@@ -10,7 +10,7 @@ class Day4
   def main
     puts(problem_one.map(&:sector_id).sum)
 
-    puts(problem_two.sort_by { |decrypted, _| decrypted }.filter_map do |(decrypted, sector_id)|
+    puts(problem_two.sort_by(&:first).filter_map do |(decrypted, sector_id)|
       sector_id if decrypted == 'northpole object storage'
     end[0])
   end
@@ -23,8 +23,8 @@ class Day4
 
   def problem_one
     @input.filter do |room|
-      most_common = room.sections.join('').split(//).sort.group_by { |s| s }.to_a.sort_by { |(k, v)| [-v.length, k] }
-      checksum = most_common[..4].map { |(k, _)| k }.join('')
+      most_common = room.sections.join('').split(//).sort.group_by(&:itself).to_a.sort_by { |(k, v)| [-v.length, k] }
+      checksum = most_common[..4].map(&:first).join('')
       checksum == room.checksum
     end
   end
