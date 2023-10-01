@@ -30,7 +30,7 @@ class Day5
         password[password_index] = digest[6] if password[password_index].nil?
       end
 
-      return password.join('') if (0..7).map { |n| password[n].nil? }.none?
+      return password.join('') if (0..7).none? { |n| password[n].nil? }
     end
   end
 end

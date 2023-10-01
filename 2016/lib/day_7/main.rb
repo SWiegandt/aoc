@@ -31,13 +31,13 @@ class Day7
     babs = Set.new
 
     address.split(/[\[\]]/).each_with_index do |str, i|
-      if i.even?
-        (0..str.length - 2).each do |i|
-          abas.add(str[i..i + 2]) if str[i] == str[i + 2] && str[i] != str[i + 1]
-        end
-      else
-        (0..str.length - 2).each do |i|
-          babs.add(str[i + 1] + str[i] + str[i + 1]) if str[i] == str[i + 2] && str[i] != str[i + 1]
+      (0..str.length - 2).each do |j|
+        if str[j] == str[j + 2] && str[j] != str[j + 1]
+          if i.even?
+            abas.add(str[j..j + 2])
+          else
+            babs.add(str[j + 1] + str[j] + str[j + 1])
+          end
         end
       end
     end
@@ -46,11 +46,11 @@ class Day7
   end
 
   def problem_one
-    @input.filter { |address| tls?(address) }.length
+    @input.count { |address| tls?(address) }
   end
 
   def problem_two
-    @input.filter { |address| ssl?(address) }.length
+    @input.count { |address| ssl?(address) }
   end
 end
 
