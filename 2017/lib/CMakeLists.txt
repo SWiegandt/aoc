@@ -1,1 +1,1 @@
-add_library(Lib foo.c)
+add_library(Lib file_util.c)
