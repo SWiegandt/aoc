@@ -6,8 +6,7 @@
 #include "file_util.h"
 #include "regex_util.h"
 
-int checksum(int (*rowsum)(int[])) {
-    REGEX(re, "[[:digit:]]+", REG_EXTENDED);
+int checksum(int (*rowsum)(int[]), regex_t* re) {
     char* input = string_input("2");
     char* line = strtok(input, "\n");
     regmatch_t pmatch[1];
@@ -16,7 +15,7 @@ int checksum(int (*rowsum)(int[])) {
 
     while (line != NULL) {
         for (int col = 0;; col++) {
-            if (regexec(&re, line, 1, pmatch, 0)) {
+            if (regexec(re, line, 1, pmatch, 0)) {
                 break;
             }
 
@@ -35,8 +34,6 @@ int checksum(int (*rowsum)(int[])) {
     }
 
     free(input);
-    regfree(&re);
-
     return sum;
 }
 
@@ -75,6 +72,11 @@ int problem_two(int cols[]) {
 }
 
 int main() {
-    printf("%d\n", checksum(&problem_one));
-    printf("%d\n", checksum(&problem_two));
+    REGEX(re, "[[:digit:]]+", REG_EXTENDED);
+
+    printf("%d\n", checksum(&problem_one, &re));
+    printf("%d\n", checksum(&problem_two, &re));
+
+    regfree(&re);
+    return 0;
 }
