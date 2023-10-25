@@ -50,7 +50,7 @@ Sums checksum() {
     char* input = string_input("2");
     char* line = strtok(input, "\n");
     regmatch_t pmatch[1];
-    Sums sums;
+    Sums sums = {0, 0};
     int cols[16];
 
     while (line != NULL) {
