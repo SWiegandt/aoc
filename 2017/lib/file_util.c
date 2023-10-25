@@ -40,11 +40,12 @@ char* string_input(const char* day) {
     }
 
     while ((ch = fgetc(fp)) != EOF) {
-        if (ch == '\n') {
-            break;
-        }
-
         buffer[i++] = ch;
+    }
+
+    // Trim trailing newlines
+    while (buffer[--i] == '\n') {
+        buffer[i] = '\0';
     }
 
     fclose(fp);
