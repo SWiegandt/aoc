@@ -34,7 +34,7 @@ char* string_input(const char* day) {
     char ch;
     size_t i = 0;
 
-    if (!buffer) {
+    if (buffer == NULL) {
         fprintf(stderr, "Couldn't allocate memory: %s\n", strerror(errno));
         exit(errno);
     }
