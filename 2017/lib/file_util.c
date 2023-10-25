@@ -9,7 +9,7 @@ extern int errno;
 
 FILE *read_input(const char *day) {
     int size = snprintf(NULL, 0, "../input/%s.txt", day);
-    char *filename = malloc(size + 1);
+    char *filename = calloc(size + 1, sizeof(char));
     sprintf(filename, "../input/%s.txt", day);
     FILE *fp = fopen(filename, "r");
     free(filename);
@@ -29,7 +29,7 @@ char *string_input(const char *day) {
     long length = ftell(fp);
     rewind(fp);
 
-    char *buffer = malloc(length);
+    char *buffer = calloc(length, sizeof(char));
     char ch;
     size_t i = 0;
 
