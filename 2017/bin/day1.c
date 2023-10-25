@@ -1,9 +1,9 @@
-#include "file_util.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "file_util.h"
 
-long problem_one(char *content) {
+long problem_one(char* content) {
     size_t i = 0;
     char ch;
     long sum = 0;
@@ -19,7 +19,7 @@ long problem_one(char *content) {
     return sum;
 }
 
-long problem_two(char *content) {
+long problem_two(char* content) {
     size_t i = 0;
     char ch;
     long sum = 0;
@@ -37,7 +37,7 @@ long problem_two(char *content) {
 }
 
 int main() {
-    char *content = string_input("1");
+    char* content = string_input("1");
     printf("%ld\n", problem_one(content));
     printf("%ld\n", problem_two(content));
     free(content);
