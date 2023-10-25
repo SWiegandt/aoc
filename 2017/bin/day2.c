@@ -6,36 +6,10 @@
 #include "file_util.h"
 #include "regex_util.h"
 
-int checksum(int (*rowsum)(int[]), regex_t* re) {
-    char* input = string_input("2");
-    char* line = strtok(input, "\n");
-    regmatch_t pmatch[1];
-    int sum = 0;
-    int cols[16];
-
-    while (line != NULL) {
-        for (int col = 0;; col++) {
-            if (regexec(re, line, 1, pmatch, 0)) {
-                break;
-            }
-
-            int len = pmatch[0].rm_eo - pmatch[0].rm_so;
-            char* match = calloc(len + 1, 1);
-            line += pmatch[0].rm_so;
-            snprintf(match, len + 1, "%s", line);
-            line += len;
-
-            cols[col] = atoi(match);
-            free(match);
-        }
-
-        sum += rowsum(cols);
-        line = strtok(NULL, "\n");
-    }
-
-    free(input);
-    return sum;
-}
+typedef struct {
+    int one;
+    int two;
+} Sums;
 
 int problem_one(int cols[]) {
     int max = 0, min = INT_MAX;
@@ -71,12 +45,46 @@ int problem_two(int cols[]) {
     return 0;
 }
 
-int main() {
+Sums checksum() {
     REGEX(re, "[[:digit:]]+", REG_EXTENDED);
+    char* input = string_input("2");
+    char* line = strtok(input, "\n");
+    regmatch_t pmatch[1];
+    Sums sums;
+    int cols[16];
 
-    printf("%d\n", checksum(&problem_one, &re));
-    printf("%d\n", checksum(&problem_two, &re));
+    while (line != NULL) {
+        for (int col = 0;; col++) {
+            if (regexec(&re, line, 1, pmatch, 0)) {
+                break;
+            }
 
+            int len = pmatch[0].rm_eo - pmatch[0].rm_so;
+            char* match = calloc(len + 1, 1);
+            line += pmatch[0].rm_so;
+            snprintf(match, len + 1, "%s", line);
+            line += len;
+
+            cols[col] = atoi(match);
+            free(match);
+        }
+
+        sums.one += problem_one(cols);
+        sums.two += problem_two(cols);
+        line = strtok(NULL, "\n");
+    }
+
+    free(input);
     regfree(&re);
+
+    return sums;
+}
+
+int main() {
+    Sums sums = checksum();
+
+    printf("%d\n", sums.one);
+    printf("%d\n", sums.two);
+
     return 0;
 }
