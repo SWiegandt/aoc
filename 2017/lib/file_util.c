@@ -9,17 +9,18 @@ extern int errno;
 
 FILE *read_input(const char *day) {
     int size = snprintf(NULL, 0, "../input/%s.txt", day);
-    char *filename = calloc(size + 1, sizeof(char));
+    char *filename = malloc(size + 1);
     sprintf(filename, "../input/%s.txt", day);
     FILE *fp = fopen(filename, "r");
-    free(filename);
 
     if (fp == NULL) {
         fprintf(stderr, "Couldn't open file %s: %s\n", filename,
                 strerror(errno));
+        free(filename);
         exit(errno);
     }
 
+    free(filename);
     return fp;
 }
 
@@ -47,7 +48,6 @@ char *string_input(const char *day) {
     }
 
     fclose(fp);
-
     return buffer;
 }
 
