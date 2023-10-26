@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <sys/cdefs.h>
 
-static void re_error(regex_t* re, const char* description, int err) {
+static void re_error(const regex_t* re, const char* description, int err) {
     char err_message[100];
     regerror(err, re, err_message, 100);
     fprintf(stderr, "%s: %s", description, err_message);

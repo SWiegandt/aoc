@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include "file_util.h"
@@ -10,18 +11,11 @@ typedef struct {
 } Sums;
 
 int problem_one(int cols[]) {
-    int max = 0, min = INT_MAX;
+    long max = 0, min = LONG_MAX;
 
     for (int col = 0; col < 16; col++) {
-        int number = cols[col];
-
-        if (number > max) {
-            max = number;
-        }
-
-        if (number < min) {
-            min = number;
-        }
+        min = fminl(min, cols[col]);
+        max = fmaxl(max, cols[col]);
     }
 
     return max - min;

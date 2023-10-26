@@ -3,7 +3,7 @@
 #include <string.h>
 #include "file_util.h"
 
-long problem_one(char* content) {
+long problem_one(const char* content) {
     size_t i = 0;
     char ch;
     long sum = 0;
@@ -19,7 +19,7 @@ long problem_one(char* content) {
     return sum;
 }
 
-long problem_two(char* content) {
+long problem_two(const char* content) {
     size_t i = 0;
     char ch;
     long sum = 0;
