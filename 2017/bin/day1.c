@@ -37,7 +37,7 @@ long problem_two(char* content) {
 }
 
 int main() {
-    char* content = string_input("1");
+    char* content = string_input(1);
     printf("%ld\n", problem_one(content));
     printf("%ld\n", problem_two(content));
     free(content);

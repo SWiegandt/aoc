@@ -1,6 +1,4 @@
 #include <limits.h>
-#include <regex.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "file_util.h"
@@ -46,11 +44,16 @@ int problem_two(int cols[]) {
 }
 
 Sums checksum() {
-    REGEX(re, "[[:digit:]]+", REG_EXTENDED);
-    char* input = string_input("2");
+    Sums sums = {0, 0};
+    regex_t re;
+
+    if (re_compile(&re, "[0-9]+", REG_EXTENDED)) {
+        exit(1);
+    }
+
+    char* input = string_input(2);
     char* line = strtok(input, "\n");
     regmatch_t pmatch[1];
-    Sums sums = {0, 0};
     int cols[16];
 
     while (line != NULL) {
@@ -59,14 +62,10 @@ Sums checksum() {
                 break;
             }
 
-            int len = pmatch[0].rm_eo - pmatch[0].rm_so;
-            char* match = calloc(len + 1, 1);
-            line += pmatch[0].rm_so;
-            snprintf(match, len + 1, "%s", line);
-            line += len;
-
+            char* match = re_group(line, pmatch, 0);
             cols[col] = atoi(match);
             free(match);
+            re_next(&line, pmatch);
         }
 
         sums.one += problem_one(cols);
@@ -82,7 +81,6 @@ Sums checksum() {
 
 int main() {
     Sums sums = checksum();
-
     printf("%d\n", sums.one);
     printf("%d\n", sums.two);
 

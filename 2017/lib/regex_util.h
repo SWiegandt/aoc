@@ -1,13 +1,7 @@
 #pragma once
 
-#define REGEX(preg, pattern, flags)                                  \
-    regex_t preg;                                                    \
-    int err = regcomp(&preg, pattern, flags);                        \
-    if (err != 0) {                                                  \
-        int err_length = regerror(err, &re, NULL, 0);                \
-        char* err_message = malloc(err_length);                      \
-        regerror(err, &re, err_message, err_length);                 \
-        fprintf(stderr, "Error compiling pattern: %s", err_message); \
-        free(err_message);                                           \
-        exit(1);                                                     \
-    }
+#include <regex.h>
+
+int re_compile(regex_t* preg, const char* pattern, int flags);
+char* re_group(char* str, regmatch_t pmatch[], size_t group);
+void re_next(char** str, regmatch_t pmatch[]);
