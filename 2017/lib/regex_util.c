@@ -1,8 +1,6 @@
 #include <regex.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/cdefs.h>
 
 static void re_error(const regex_t* re, const char* description, int err) {
     char err_message[100];
