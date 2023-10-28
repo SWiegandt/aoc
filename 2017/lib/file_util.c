@@ -9,7 +9,7 @@ extern int errno;
 
 FILE* read_input(int day) {
     char filename[16];
-    snprintf(filename, 16, "../input/%d.txt", day);
+    snprintf(filename, 16, "input/%d.txt", day);
     FILE* fp = fopen(filename, "r");
 
     if (fp == NULL) {
