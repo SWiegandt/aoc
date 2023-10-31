@@ -7,7 +7,7 @@
 
 extern int errno;
 
-FILE* read_input(int day) {
+FILE* file_input(int day) {
     char filename[16];
     snprintf(filename, 16, "input/%d.txt", day);
     FILE* fp = fopen(filename, "r");
@@ -21,31 +21,44 @@ FILE* read_input(int day) {
     return fp;
 }
 
-char* string_input(int day) {
-    FILE* fp = read_input(day);
+FileInput* read_input(int day) {
+    FILE* fp = file_input(day);
     fseek(fp, 0, SEEK_END);
     long length = ftell(fp);
     rewind(fp);
 
-    char* buffer = calloc(length, 1);
+    FileInput* finput = malloc(sizeof(FileInput));
+    finput->input = finput->next_token = calloc(length, 1);
     char ch;
     size_t i = 0;
 
-    if (buffer == NULL) {
+    if (finput->input == NULL) {
         fclose(fp);
         fprintf(stderr, "Couldn't allocate memory: %s\n", strerror(errno));
         exit(1);
     }
 
     while ((ch = fgetc(fp)) != EOF) {
-        buffer[i++] = ch;
+        finput->input[i++] = ch;
     }
 
     // Trim trailing newlines
-    while (buffer[--i] == '\n') {
-        buffer[i] = '\0';
+    while (finput->input[--i] == '\n') {
+        finput->input[i] = '\0';
     }
 
     fclose(fp);
-    return buffer;
+    return finput;
+}
+
+char* next_line(FileInput* input) {
+    char* line = strtok(input->next_token, "\n");
+    input->next_token = NULL;
+
+    return line;
+}
+
+void cleanup(FileInput* input) {
+    free(input->input);
+    free(input);
 }

@@ -1,7 +1,7 @@
 #include <limits.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "file_util.h"
 #include "regex_util.h"
 
@@ -45,12 +45,11 @@ Sums checksum() {
         exit(1);
     }
 
-    char* input = string_input(2);
-    char* line = strtok(input, "\n");
+    FileInput* input = read_input(2);
     regmatch_t pmatch[1];
     int cols[16];
 
-    while (line != NULL) {
+    loop(input, line) {
         for (int col = 0;; col++) {
             if (regexec(&re, line, 1, pmatch, 0)) {
                 break;
@@ -64,11 +63,10 @@ Sums checksum() {
 
         sums.one += problem_one(cols);
         sums.two += problem_two(cols);
-        line = strtok(NULL, "\n");
     }
 
-    free(input);
     regfree(&re);
+    cleanup(input);
 
     return sums;
 }

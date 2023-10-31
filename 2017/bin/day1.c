@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "file_util.h"
 
@@ -37,10 +36,10 @@ long problem_two(const char* content) {
 }
 
 int main() {
-    char* content = string_input(1);
-    printf("%ld\n", problem_one(content));
-    printf("%ld\n", problem_two(content));
-    free(content);
+    FileInput* content = read_input(1);
+    printf("%ld\n", problem_one(content->input));
+    printf("%ld\n", problem_two(content->input));
+    cleanup(content);
 
     return 0;
 }
