@@ -39,7 +39,7 @@ int main() {
     FileInput* content = read_input(1);
     printf("%ld\n", problem_one(content->input));
     printf("%ld\n", problem_two(content->input));
-    cleanup(content);
+    free_input(content);
 
     return 0;
 }

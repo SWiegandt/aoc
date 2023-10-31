@@ -23,12 +23,13 @@ int is_valid(char* passphrase, void (*word_modifier)(char*)) {
             snprintf(word, word_length + 1, "%s", passphrase + i - word_length);
             word_modifier(word);
 
-            if (!contains(words, word)) {
-                push(words, word);
-            } else {
+            if (contains(words, word)) {
+                free(word);
                 free_list(words);
                 return 0;
             }
+
+            push(words, word);
             word_length = 0;
         } else {
             word_length++;
@@ -43,10 +44,11 @@ int problem_one() {
     FileInput* input = read_input(4);
     int valid = 0;
 
-    loop(input, passphase) {
+    loop_file(input, passphase) {
         valid += is_valid(passphase, noop);
     }
 
+    free_input(input);
     return valid;
 }
 
@@ -54,10 +56,11 @@ int problem_two() {
     FileInput* input = read_input(4);
     int valid = 0;
 
-    loop(input, passphase) {
+    loop_file(input, passphase) {
         valid += is_valid(passphase, sort);
     }
 
+    free_input(input);
     return valid;
 }
 int main() {

@@ -12,5 +12,8 @@ typedef struct {
 List* list();
 void push(List* list, void* value);
 void* pop(List* list);
-int contains(List* list, char* value);
+int contains(List* list, const char* value);
 void free_list(List* list);
+
+#define loop_list(list, node) \
+    for (Node* node = list->head; node != NULL; node = node->next)

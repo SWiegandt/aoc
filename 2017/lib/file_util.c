@@ -58,7 +58,7 @@ char* next_line(FileInput* input) {
     return line;
 }
 
-void cleanup(FileInput* input) {
+void free_input(FileInput* input) {
     free(input->input);
     free(input);
 }

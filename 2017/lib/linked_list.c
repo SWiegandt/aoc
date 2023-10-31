@@ -1,4 +1,5 @@
 #include "linked_list.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -34,15 +35,11 @@ void* pop(List* list) {
     return value;
 }
 
-int contains(List* list, char* value) {
-    Node* node = list->head;
-
-    while (node != NULL) {
+int contains(List* list, const char* value) {
+    loop_list(list, node) {
         if (strcmp(node->value, value) == 0) {
             return 1;
         }
-
-        node = node->next;
     }
 
     return 0;
