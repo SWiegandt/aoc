@@ -35,9 +35,8 @@ int main() {
     int jumps_two[JUMPS];
     int i = 0;
 
-    loop_file(input, line) {
-        jumps_one[i] = jumps_two[i] = atoi(line);
-        i++;
+    loop_file(input, idx, line) {
+        jumps_one[idx] = jumps_two[idx] = atoi(line);
     }
 
     printf("%d\n", problem_one(jumps_one));

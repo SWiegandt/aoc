@@ -12,5 +12,7 @@ FileInput* read_input(int day);
 char* next_line(FileInput* input);
 void free_input(FileInput* input);
 
-#define loop_file(input, line) \
-    for (char* line = next_line(input); line != NULL; line = next_line(input))
+#define loop_file(input, idx, line)                   \
+    int idx = 0;                                      \
+    for (char* line = next_line(input); line != NULL; \
+         line = next_line(input), idx++)

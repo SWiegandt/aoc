@@ -1,4 +1,4 @@
-foreach(day RANGE 1 5)
+foreach(day RANGE 1 6)
     add_executable(Day${day} day${day}.c)
     target_link_libraries(Day${day} Lib m)
     target_include_directories(Day${day} PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/lib")

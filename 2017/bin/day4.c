@@ -44,7 +44,7 @@ int problem_one() {
     FileInput* input = read_input(4);
     int valid = 0;
 
-    loop_file(input, passphase) {
+    loop_file(input, idx, passphase) {
         valid += is_valid(passphase, noop);
     }
 
@@ -56,7 +56,7 @@ int problem_two() {
     FileInput* input = read_input(4);
     int valid = 0;
 
-    loop_file(input, passphase) {
+    loop_file(input, idx, passphase) {
         valid += is_valid(passphase, sort);
     }
 

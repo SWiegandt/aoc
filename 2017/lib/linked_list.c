@@ -36,7 +36,7 @@ void* pop(List* list) {
 }
 
 int contains(List* list, const char* value) {
-    loop_list(list, node) {
+    loop_list(list, idx, node) {
         if (strcmp(node->value, value) == 0) {
             return 1;
         }

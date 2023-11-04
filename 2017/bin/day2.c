@@ -49,7 +49,7 @@ Sums checksum() {
     regmatch_t pmatch[1];
     int cols[16];
 
-    loop_file(input, line) {
+    loop_file(input, idx, line) {
         for (int col = 0;; col++) {
             if (regexec(&re, line, 1, pmatch, 0)) {
                 break;
