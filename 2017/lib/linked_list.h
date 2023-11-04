@@ -12,5 +12,6 @@ typedef struct {
 List* list();
 void push(List* list, void* value);
 void* pop(List* list);
-int contains(List* list, char* value);
+int list_contains_str(List* list, char* value);
+int list_contains_int(List* list, int* value);
 void free_list(List* list);

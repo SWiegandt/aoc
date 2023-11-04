@@ -34,11 +34,25 @@ void* pop(List* list) {
     return value;
 }
 
-int contains(List* list, char* value) {
+int list_contains_str(List* list, char* value) {
     Node* node = list->head;
 
     while (node != NULL) {
         if (strcmp(node->value, value) == 0) {
+            return 1;
+        }
+
+        node = node->next;
+    }
+
+    return 0;
+}
+
+int list_contains_int(List* list, int* value) {
+    Node* node = list->head;
+
+    while (node != NULL) {
+        if (*(int*)node->value == *value) {
             return 1;
         }
 
