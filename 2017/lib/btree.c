@@ -53,6 +53,11 @@ int tree_contains(BTree* tree, void* item) {
     return 0;
 }
 
+static void free_btree_node(BTreeNode* node) {
+    free(node->item);
+    free(node);
+}
+
 void free_btree(BTree* tree) {
     BTreeNode* node = tree->root;
     int freed_nodes = 0;
@@ -68,8 +73,7 @@ void free_btree(BTree* tree) {
             prev->right = NULL;
         } else {
             BTreeNode* parent = node->parent;
-            free(node->item);
-            free(node);
+            free_btree_node(node);
             node = parent;
             freed_nodes++;
         }

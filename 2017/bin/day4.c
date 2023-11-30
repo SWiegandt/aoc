@@ -23,7 +23,7 @@ int is_valid(char* passphrase, void (*word_modifier)(char*)) {
             snprintf(word, word_length + 1, "%s", passphrase + i - word_length);
             word_modifier(word);
 
-            if (contains(words, word)) {
+            if (list_contains(words, word)) {
                 free(word);
                 free_list(words);
                 return 0;

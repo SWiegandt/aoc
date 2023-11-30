@@ -6,6 +6,8 @@
 List* list() {
     List* list = malloc(sizeof(List));
     list->head = NULL;
+    list->length = 0;
+
     return list;
 }
 
@@ -20,6 +22,7 @@ void push(List* list, void* value) {
     Node* node = create_node(value);
     node->next = list->head;
     list->head = node;
+    list->length++;
 }
 
 void* pop(List* list) {
@@ -30,12 +33,13 @@ void* pop(List* list) {
     Node* head = list->head;
     void* value = head->value;
     list->head = head->next;
+    list->length--;
     free(head);
 
     return value;
 }
 
-int contains(List* list, const char* value) {
+int list_contains(List* list, const char* value) {
     loop_list(list, idx, node) {
         if (strcmp(node->value, value) == 0) {
             return 1;
