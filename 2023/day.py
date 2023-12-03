@@ -19,7 +19,7 @@ class Day(ABC):
         pass
 
     def run(self, input=None):
-        input = input or self.read()
+        input = input or self.read().strip()
         newline = "\n"
         print(f"Problem one: {self.one(input.split(newline))}")
         print(f"Problem two: {self.two(input.split(newline))}")
