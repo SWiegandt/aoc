@@ -18,8 +18,7 @@ class Day(ABC):
     def two(self, input):
         pass
 
-    def run(self, input=None):
+    def run(self, input=None, mapper=lambda input: input.split("\n")):
         input = input or self.read().strip()
-        newline = "\n"
-        print(f"Problem one: {self.one(input.split(newline))}")
-        print(f"Problem two: {self.two(input.split(newline))}")
+        print(f"Problem one: {self.one(mapper(input))}")
+        print(f"Problem two: {self.two(mapper(input))}")
