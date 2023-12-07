@@ -34,8 +34,6 @@ class DayThree(Day):
         return (y, start), int(row[start : stop + 1])
 
     def find_numbers(self, engine: List[str], x: int, y: int):
-        numbers = {}
-
         for dy in range(-1, 2):
             for dx in range(-1, 2):
                 if not 0 <= y + dy <= len(engine):
