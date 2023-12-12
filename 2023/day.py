@@ -10,7 +10,7 @@ class Day(ABC):
         pass
 
     def read(self):
-        input_file = Path(f"../aoc-inputs/2023/{self.day}.txt")
+        input_file = Path(f"../inputs/2023/{self.day}.txt")
 
         if not input_file.exists():
             subprocess.run(["./get-input", "2023", str(self.day)], cwd=Path(__file__).parent.parent)

@@ -18,7 +18,7 @@ if __name__ == "__main__":
     response = urllib.request.urlopen(request)
 
     if response.status == 200:
-        input_file = Path(__file__).parent / "aoc-inputs" / year / f"{day}.txt"
+        input_file = Path(__file__).parent / "inputs" / year / f"{day}.txt"
         input_file.parent.mkdir(exist_ok=True)
         input_file.write_text(response.read().decode())
     else:

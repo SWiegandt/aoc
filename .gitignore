@@ -5,4 +5,4 @@ aoc2018.cabal
 .vscode/
 .metals/
 .session
-./aoc-inputs/
+inputs/
