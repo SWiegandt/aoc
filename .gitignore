@@ -4,6 +4,5 @@ aoc2018.cabal
 2022/target
 .vscode/
 .metals/
-input/
-inputs/
-*.input
+.session
+./aoc-inputs/

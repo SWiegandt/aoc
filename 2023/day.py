@@ -1,3 +1,4 @@
+import subprocess
 from abc import ABC, abstractmethod
 from pathlib import Path
 
@@ -9,8 +10,12 @@ class Day(ABC):
         pass
 
     def read(self):
-        with Path(f"./inputs/{self.day}.txt") as src:
-            return src.read_text()
+        input_file = Path(f"../aoc-inputs/2023/{self.day}.txt")
+
+        if not input_file.exists():
+            subprocess.run(["./get-input", "2023", str(self.day)], cwd=Path(__file__).parent.parent)
+
+        return input_file.read_text()
 
     def one(self, input):
         pass
