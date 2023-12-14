@@ -10,12 +10,17 @@ class Day(ABC):
         pass
 
     def read(self):
-        input_file = Path(f"../inputs/2023/{self.day}.txt")
+        input_path = (
+            subprocess.run(
+                ["./get-input", "2023", str(self.day)],
+                cwd=Path(__file__).parent.parent,
+                capture_output=True,
+            )
+            .stdout.decode()
+            .strip()
+        )
 
-        if not input_file.exists():
-            subprocess.run(["./get-input", "2023", str(self.day)], cwd=Path(__file__).parent.parent)
-
-        return input_file.read_text()
+        return Path(input_path).read_text()
 
     def one(self, input):
         pass
