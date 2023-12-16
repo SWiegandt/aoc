@@ -1,4 +1,4 @@
-import re
+import itertools
 from itertools import zip_longest
 
 from day import Day
@@ -7,42 +7,68 @@ from day import Day
 class DayTwelve(Day):
     day = 12
 
-    def check_arrangement(self, arrangement):
-        springs, groups = arrangement.split()
-        groups = groups.split(",")
-        arrangements = 0
+    def partitions(self, n, buckets):
+        ps = set()
 
-        for match, group in zip_longest(re.findall(r"#+", springs), groups):
-            if len(match) != int(group):
+        for partition in self.accel_asc(n):
+            if len(partition) == buckets:
+                for p in itertools.permutations(partition):
+                    ps.add(p)
+
+        return list(list(p) for p in ps)
+
+    def accel_asc(self, n):
+        a = [0 for i in range(n + 1)]
+        k = 1
+        y = n - 1
+        while k != 0:
+            x = a[k - 1] + 1
+            k -= 1
+            while 2 * x <= y:
+                a[k] = x
+                y -= x
+                k += 1
+            l = k + 1
+            while x <= y:
+                a[k] = x
+                a[l] = y
+                yield a[: k + 2]
+                x += 1
+                y -= 1
+            a[k] = x + y
+            y = x + y - 1
+            yield a[: k + 1]
+
+    def check_partition(self, springs, partition, groups):
+        pos = 0
+
+        for gap, group in zip_longest(partition, groups):
+            if "#" in springs[pos : pos + gap]:
                 return False
+            elif group is None:
+                return "#" not in springs[pos:]
+            elif "." in springs[pos + gap : pos + gap + group]:
+                return False
+
+            pos += gap + group
 
         return True
 
     def one(self, input):
-        arrangements = 0
+        s = 0
 
         for row in input:
-            num_unknown = len([c for c in row if c == "?"])
-            num_broken = sum(map(int, row.split()[1].split(",")))
-            num_known_broken = row.count("#")
+            springs, groups_str = row.split()
+            groups = list(map(int, groups_str.split(",")))
+            partitions = self.partitions(len(springs) - sum(groups), len(groups) + 1)
+            partitions_l = [[0] + p for p in self.partitions(len(springs) - sum(groups), len(groups))]
+            partitions_r = [p + [0] for p in self.partitions(len(springs) - sum(groups), len(groups))]
+            partitions_lr = [[0] + p + [0] for p in self.partitions(len(springs) - sum(groups), len(groups) - 1)]
 
-            for bitmask in range(2**num_unknown):
-                if bitmask.bit_count() != num_broken - num_known_broken:
-                    continue
+            for partition in partitions + partitions_l + partitions_r + partitions_lr:
+                s += int(self.check_partition(springs, partition, groups))
 
-                arrangement = ""
-                c = 0
-
-                for spring in row:
-                    if spring == "?":
-                        arrangement += "#" if 2**c & bitmask else "."
-                        c += 1
-                    else:
-                        arrangement += spring
-
-                arrangements += int(self.check_arrangement(arrangement))
-
-        return arrangements
+        return s
 
     def two(self, input):
         new_input = []
