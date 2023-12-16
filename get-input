@@ -22,6 +22,7 @@ if __name__ == "__main__":
     if input_file.exists():
         success(input_file)
 
+    print("Downloading input file...", file=sys.stderr)
     request = urllib.request.Request(
         f"https://adventofcode.com/{year}/day/{day}/input",
         headers={"Cookie": f"session={session}"},

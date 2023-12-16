@@ -14,7 +14,7 @@ class Day(ABC):
             subprocess.run(
                 ["./get-input", "2023", str(self.day)],
                 cwd=Path(__file__).parent.parent,
-                capture_output=True,
+                stdout=subprocess.PIPE,
             )
             .stdout.decode()
             .strip()

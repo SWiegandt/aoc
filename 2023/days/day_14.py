@@ -46,7 +46,6 @@ class DayFourteen(Day):
         input = list(map(list, input))
         seen_configs = {}
         loads = []
-        return_modulus = None
 
         for n in itertools.count():
             for fn in [self.move_up, self.move_left, self.move_down, self.move_right]:
