@@ -1,5 +1,4 @@
-import re
-from itertools import zip_longest
+from functools import lru_cache
 
 from day import Day
 
@@ -7,59 +6,57 @@ from day import Day
 class DayTwelve(Day):
     day = 12
 
-    def check_arrangement(self, arrangement):
-        springs, groups = arrangement.split()
-        groups = groups.split(",")
-        arrangements = 0
+    def find_arrangements(self, springs, groups):
+        @lru_cache(maxsize=None)
+        def go(springs, val, group):
+            if not springs:
+                return group >= len(groups) or (group == len(groups) - 1 and val == groups[-1])
 
-        for match, group in zip_longest(re.findall(r"#+", springs), groups):
-            if len(match) != int(group):
-                return False
+            if group >= len(groups):
+                return "#" not in springs
 
-        return True
+            match springs[0]:
+                case "#":
+                    if group >= len(groups) or groups[group] < val + 1:
+                        return 0
+
+                    return go(springs[1:], val + 1, group)
+                case ".":
+                    if 0 < val < groups[group]:
+                        return 0
+                    elif val > 0 and val == groups[group]:
+                        group += 1
+
+                    return go(springs[1:], 0, group)
+                case "?":
+                    if 0 < val < groups[group]:
+                        return go("#" + springs[1:], val, group)
+                    elif val == groups[group]:
+                        return go("." + springs[1:], val, group)
+
+                    return go("#" + springs[1:], val, group) + go("." + springs[1:], val, group)
+
+        return go(springs, 0, 0)
 
     def one(self, input):
-        arrangements = 0
+        s = 0
 
-        for row in input:
-            num_unknown = len([c for c in row if c == "?"])
-            num_broken = sum(map(int, row.split()[1].split(",")))
-            num_known_broken = row.count("#")
+        for n, row in enumerate(input):
+            springs, groups = row.split()
+            groups = list(map(int, groups.split(",")))
+            s += self.find_arrangements(springs, groups)
 
-            for bitmask in range(2**num_unknown):
-                if bitmask.bit_count() != num_broken - num_known_broken:
-                    continue
-
-                arrangement = ""
-                c = 0
-
-                for spring in row:
-                    if spring == "?":
-                        arrangement += "#" if 2**c & bitmask else "."
-                        c += 1
-                    else:
-                        arrangement += spring
-
-                arrangements += int(self.check_arrangement(arrangement))
-
-        return arrangements
+        return s
 
     def two(self, input):
-        new_input = []
+        rows = []
 
         for row in input:
             springs, groups = row.split()
-            new_input.append("?".join(5 * [springs]) + " " + ",".join(5 * [groups]))
+            rows.append("?".join([springs] * 5) + " " + ",".join([groups] * 5))
 
-        return self.one(new_input)
+        return self.one(rows)
 
 
 if __name__ == "__main__":
-    DayTwelve().run(
-        """???.### 1,1,3
-.??..??...?##. 1,1,3
-?#?#?#?#?#?#?#? 1,3,1,6
-????.#...#... 4,1,1
-????.######..#####. 1,6,5
-?###???????? 3,2,1"""
-    )
+    DayTwelve().run()
