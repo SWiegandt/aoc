@@ -1,5 +1,4 @@
-import itertools
-from itertools import zip_longest
+from functools import lru_cache
 
 from day import Day
 
@@ -7,85 +6,57 @@ from day import Day
 class DayTwelve(Day):
     day = 12
 
-    def partitions(self, n, buckets):
-        ps = set()
+    def find_arrangements(self, springs, groups):
+        @lru_cache(maxsize=None)
+        def go(springs, val, group):
+            if not springs:
+                return group >= len(groups) or (group == len(groups) - 1 and val == groups[-1])
 
-        for partition in self.accel_asc(n):
-            if len(partition) == buckets:
-                for p in itertools.permutations(partition):
-                    ps.add(p)
+            if group >= len(groups):
+                return not "#" in springs
 
-        return list(list(p) for p in ps)
+            match springs[0]:
+                case "#":
+                    if group >= len(groups) or groups[group] < val + 1:
+                        return 0
 
-    def accel_asc(self, n):
-        a = [0 for i in range(n + 1)]
-        k = 1
-        y = n - 1
-        while k != 0:
-            x = a[k - 1] + 1
-            k -= 1
-            while 2 * x <= y:
-                a[k] = x
-                y -= x
-                k += 1
-            l = k + 1
-            while x <= y:
-                a[k] = x
-                a[l] = y
-                yield a[: k + 2]
-                x += 1
-                y -= 1
-            a[k] = x + y
-            y = x + y - 1
-            yield a[: k + 1]
+                    return go(springs[1:], val + 1, group)
+                case ".":
+                    if 0 < val < groups[group]:
+                        return 0
+                    elif val > 0 and val == groups[group]:
+                        group += 1
 
-    def check_partition(self, springs, partition, groups):
-        pos = 0
+                    return go(springs[1:], 0, group)
+                case "?":
+                    if 0 < val < groups[group]:
+                        return go("#" + springs[1:], val, group)
+                    elif val == groups[group]:
+                        return go("." + springs[1:], val, group)
 
-        for gap, group in zip_longest(partition, groups):
-            if "#" in springs[pos : pos + gap]:
-                return False
-            elif group is None:
-                return "#" not in springs[pos:]
-            elif "." in springs[pos + gap : pos + gap + group]:
-                return False
+                    return go("#" + springs[1:], val, group) + go("." + springs[1:], val, group)
 
-            pos += gap + group
-
-        return True
+        return go(springs, 0, 0)
 
     def one(self, input):
         s = 0
 
-        for row in input:
-            springs, groups_str = row.split()
-            groups = list(map(int, groups_str.split(",")))
-            partitions = self.partitions(len(springs) - sum(groups), len(groups) + 1)
-            partitions_l = [[0] + p for p in self.partitions(len(springs) - sum(groups), len(groups))]
-            partitions_r = [p + [0] for p in self.partitions(len(springs) - sum(groups), len(groups))]
-            partitions_lr = [[0] + p + [0] for p in self.partitions(len(springs) - sum(groups), len(groups) - 1)]
-
-            for partition in partitions + partitions_l + partitions_r + partitions_lr:
-                s += int(self.check_partition(springs, partition, groups))
+        for n, row in enumerate(input):
+            springs, groups = row.split()
+            groups = list(map(int, groups.split(",")))
+            s += self.find_arrangements(springs, groups)
 
         return s
 
     def two(self, input):
-        new_input = []
+        rows = []
 
         for row in input:
             springs, groups = row.split()
-            new_input.append("?".join(5 * [springs]) + " " + ",".join(5 * [groups]))
+            rows.append("?".join([springs] * 5) + " " + ",".join([groups] * 5))
 
-        return self.one(new_input)
+        return self.one(rows)
 
 
 if __name__ == "__main__":
-    DayTwelve().run(
-        """???.### 1,1,3
-.??..??...?##. 1,1,3
-?#?#?#?#?#?#?#? 1,3,1,6
-????.#...#... 4,1,1
-????.######..#####. 1,6,5
-?###???????? 3,2,1"""
-    )
+    DayTwelve().run()
