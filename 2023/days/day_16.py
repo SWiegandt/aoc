@@ -30,14 +30,12 @@ class DaySixteen(Day):
                         dy, dx = -dx, -dy
                     case "\\":
                         dy, dx = dx, dy
-                    case "|":
-                        if dx:
-                            beams.extend([(y, x, (1, 0)), (y, x, (-1, 0))])
-                            break
-                    case "-":
-                        if dy:
-                            beams.extend([(y, x, (0, 1)), (y, x, (0, -1))])
-                            break
+                    case "|" if dx:
+                        beams.extend([(y, x, (1, 0)), (y, x, (-1, 0))])
+                        break
+                    case "-" if dy:
+                        beams.extend([(y, x, (0, 1)), (y, x, (0, -1))])
+                        break
 
                 y, x = y + dy, x + dx
 
