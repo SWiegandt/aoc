@@ -70,7 +70,7 @@ class DayNineteen(Day):
 
         return sum(sum(part.values()) for part in accepted)
 
-    def get_accepted_bounds(self, workflows: Dict[str, Workflow], workflow, bounds, path):
+    def get_accepted_bounds(self, workflows: Dict[str, Workflow], workflow, bounds):
         if workflow == "A":
             yield bounds
             return
@@ -83,7 +83,7 @@ class DayNineteen(Day):
 
         for rule in workflows[workflow].rules:
             if not rule.comparator:
-                yield from self.get_accepted_bounds(workflows, rule.destination, bounds, path + [rule.destination])
+                yield from self.get_accepted_bounds(workflows, rule.destination, bounds)
                 return
 
             match rule.comparator:
@@ -95,7 +95,6 @@ class DayNineteen(Day):
                             **bounds,
                             rule.property: (bounds[rule.property][0], min(rule.value - 1, bounds[rule.property][1])),
                         },
-                        path + [rule.destination],
                     )
 
                     bounds[rule.property] = (max(rule.value, bounds[rule.property][0]), bounds[rule.property][1])
@@ -107,7 +106,6 @@ class DayNineteen(Day):
                             **bounds,
                             rule.property: (max(rule.value + 1, bounds[rule.property][0]), bounds[rule.property][1]),
                         },
-                        path + [rule.destination],
                     )
 
                     bounds[rule.property] = (bounds[rule.property][0], min(rule.value, bounds[rule.property][1]))
@@ -118,7 +116,7 @@ class DayNineteen(Day):
 
         return sum(
             math.prod(upper - lower + 1 for (lower, upper) in bounds.values())
-            for bounds in self.get_accepted_bounds(workflows, "in", bounds, [])
+            for bounds in self.get_accepted_bounds(workflows, "in", bounds)
         )
 
 
