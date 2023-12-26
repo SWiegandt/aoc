@@ -1,7 +1,7 @@
 import itertools
 import re
 
-import numpy
+import sympy
 
 from day import Day
 
@@ -68,7 +68,7 @@ class DayTwentyFour(Day):
             w[i] = R[j] - r[j]
             w[j] = r[i] - R[i]
 
-            return [*s, *w], -(R[i] * V[j] - r[i] * v[j] + r[j] * v[i] - R[j] * V[i])
+            return [*s, *w, -(R[i] * V[j] - r[i] * v[j] + r[j] * v[i] - R[j] * V[i])]
 
         hail = []
 
@@ -80,18 +80,13 @@ class DayTwentyFour(Day):
             hail.append(((x, y, z), (vx, vy, vz)))
 
         m = []
-        b = []
-        ns = numpy.random.randint(1, len(hail) - 1, 2)
 
-        for n in ns:
+        for n in range(1, 3):
             for i, j in itertools.combinations(range(3), 2):
-                coeff, res = generate_coefficients(hail[0][0], hail[0][1], hail[n][0], hail[n][1], i, j)
+                coeff = generate_coefficients(hail[0][0], hail[0][1], hail[n][0], hail[n][1], i, j)
                 m.append(coeff)
-                b.append(res)
 
-        X = numpy.linalg.solve(m, b)
-
-        return sum(X[:3])
+        return sum(sympy.linsolve(sympy.Matrix(m)).args[0][:3])
 
 
 if __name__ == "__main__":
