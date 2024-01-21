@@ -16,20 +16,27 @@ class DayTwentyFive(Day):
                 connections[src].add(d)
                 connections[d].add(src)
 
+        def remove(src, dst):
+            connections[src].remove(dst)
+            connections[dst].remove(src)
+
+        group = set()
+        queue = [k for k in connections.keys()][:1]
+
+        # by graphviz inspection :(
+        remove("rrl", "pcs")
+        remove("mbk", "qnd")
+        remove("ddl", "lcm")
+
+        while queue:
+            if (component := queue.pop()) in group:
+                continue
+
+            queue.extend(connections[component])
+            group.add(component)
+
+        return len(group) * (len(connections) - len(group))
+
 
 if __name__ == "__main__":
-    DayTwentyFive().run(
-        """jqt: rhn xhk nvd
-rsh: frs pzl lsr
-xhk: hfx
-cmg: qnr nvd lhk bvb
-rhn: xhk bvb hfx
-bvb: xhk hfx
-pzl: lsr hfx nvd
-qnr: nvd
-ntq: jqt hfx bvb xhk
-nvd: lhk
-lsr: lhk
-rzs: qnr cmg lsr rsh
-frs: qnr lhk lsr"""
-    )
+    DayTwentyFive().run()
