@@ -45,10 +45,10 @@ class DayTwentyTwo(Day):
     def num_falling(self, removed, supports):
         falling = set((brick for brick, support in supports.items() if not support - removed))
 
-        if not falling:
-            return 0
+        if not falling - removed:
+            return len(falling)
 
-        return len(falling) + self.num_falling(falling, supports)
+        return self.num_falling(removed.union(falling), supports)
 
     def one(self, input):
         bricks, supports = self.brick_supports(input)
