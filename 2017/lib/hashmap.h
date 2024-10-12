@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sys/_types/_size_t.h>
+#include <stdio.h>
 #include "linked_list.h"
 
 #define BUCKETS 10000
