@@ -6,3 +6,6 @@ aoc2018.cabal
 .metals/
 .session
 inputs/
+.clj-kondo
+.lsp
+.cpcache

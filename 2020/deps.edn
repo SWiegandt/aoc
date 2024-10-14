@@ -1,0 +1,3 @@
+{:paths [:src :test]
+ :aliases {:src ["src"]
+           :test ["test"]}}
