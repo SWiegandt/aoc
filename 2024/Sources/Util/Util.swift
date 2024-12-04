@@ -8,7 +8,9 @@ public struct Transposed<Element>: IteratorProtocol, Sequence {
     private var vals: [[Element]]
     private var row = 0
 
-    init(_ vals: [[Element]]) { self.vals = vals }
+    init(_ vals: [[Element]]) {
+        self.vals = vals
+    }
 
     mutating public func next() -> [Element]? {
         defer { self.row += 1 }
