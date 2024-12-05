@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let executableTargets = (1...4).map { d in
+let executableTargets = (1...5).map { d in
     Target.executableTarget(name: "Day\(d)", dependencies: ["Util"])
 }
 

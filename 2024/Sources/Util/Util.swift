@@ -2,26 +2,33 @@ import Foundation
 
 extension Sequence where Element: Numeric {
     public var sum: Element { self.reduce(0, +) }
+    public var product: Element { self.reduce(1, *) }
 }
 
-public struct Transposed<Element>: IteratorProtocol, Sequence {
-    private var vals: [[Element]]
-    private var row = 0
+public struct Transposed<Element>: Collection {
+    private var elements: [[Element]]
+    public var startIndex: Int
+    public var endIndex: Int
 
-    init(_ vals: [[Element]]) {
-        self.vals = vals
+    init(_ elements: [[Element]]) {
+        startIndex = 0
+        endIndex = elements[0].count
+        self.elements = elements
     }
 
-    mutating public func next() -> [Element]? {
-        defer { self.row += 1 }
-        if row >= self.vals[0].count { return nil }
+    public func index(after i: Int) -> Int {
+        i + 1
+    }
 
-        return self.vals.map { $0[self.row] }
+    public subscript(position: Int) -> [Element] {
+        elements.map { $0[position] }
     }
 }
 
 extension Array {
-    public func transposed<T>() -> Transposed<T> where Element == [T] { Transposed(self) }
+    public func transposed<T>() -> Transposed<T> where Element == [T] {
+        Transposed(self)
+    }
 }
 
 func getInput(_ day: Int) throws {
