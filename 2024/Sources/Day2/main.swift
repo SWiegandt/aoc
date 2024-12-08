@@ -2,7 +2,7 @@ import Util
 
 func findSafe(_ report: [Int], _ cmp: (Int, Int) -> Int) -> Bool {
     zip(report, report.suffix(from: 1)).allSatisfy({
-        (a, b) in 0 < cmp(a, b) && cmp(a, b) < 4
+        (a, b) in cmp(a, b).between(1, 4)
     })
 }
 

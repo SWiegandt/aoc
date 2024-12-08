@@ -23,30 +23,6 @@ struct Direction: Hashable {
         x = -y
         y = _x
     }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
-    }
-}
-
-struct Position: Hashable {
-    public var x: Int = 0
-    public var y: Int = 0
-
-    init(_ x: Int, _ y: Int) {
-        self.x = x
-        self.y = y
-    }
-
-    func add(_ x: Int, _ y: Int) -> Position {
-        Position(self.x + x, self.y + y)
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(x)
-        hasher.combine(y)
-    }
 }
 
 struct Guard: Hashable {
@@ -56,11 +32,6 @@ struct Guard: Hashable {
     init(_ pos: Position, _ dir: Direction) {
         self.pos = pos
         self.dir = dir
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(pos)
-        hasher.combine(dir)
     }
 }
 
@@ -76,7 +47,7 @@ extension [[Substring]] {
     }
 
     func valid(_ pos: Position) -> Bool {
-        return 0 <= pos.x && pos.x < self[0].count && 0 <= pos.y && pos.y < self.count
+        return pos.x.between(0, self[0].count) && pos.y.between(0, self.count)
     }
 }
 
